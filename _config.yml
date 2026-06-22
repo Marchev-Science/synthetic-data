@@ -1,0 +1,37 @@
+title: Synthetic Data Generation
+author: Angel Marchev & Vasil Marchev
+copyright: "2024"
+logo: ""
+
+execute:
+  execute_notebooks: "off"
+
+parse:
+  myst_enable_extensions:
+    - dollarmath
+    - colon_fence
+
+html:
+  use_issues_button: false
+  use_repository_button: false
+  use_edit_page_button: false
+  extra_navbar: "Research project НИД НИ 23/2023/В — UNWE Sofia"
+  home_page_in_navbar: true
+
+repository:
+  url: https://github.com/Marchev-Science/synthetic-data
+  branch: main
+
+launch_buttons:
+  colab_url: "https://colab.research.google.com"
+
+sphinx:
+  config:
+    html_show_sourcelink: false
+    html_theme_options:
+      show_navbar_depth: 2
+      use_repository_button: false
+      use_issues_button: false
+      use_edit_page_button: false
+      repository_url: https://github.com/Marchev-Science/synthetic-data
+      repository_branch: main

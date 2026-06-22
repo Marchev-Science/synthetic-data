@@ -1,0 +1,28 @@
+format: jb-book
+root: intro
+
+parts:
+  - caption: Introduction
+    chapters:
+      - file: notebooks/00_overview/introduction
+
+  - caption: Supporting Techniques
+    chapters:
+      - file: notebooks/01_imputation/01_missing_values_by_category
+      - file: notebooks/01_imputation/02_missing_values_noisy_input
+      - file: notebooks/02_oversampling/01_random_naive_oversampling
+      - file: notebooks/02_oversampling/02_smote
+      - file: notebooks/03_monte_carlo/01_dice_distribution
+      - file: notebooks/03_monte_carlo/02_distribution_fitting
+
+  - caption: Algorithm Implementations
+    chapters:
+      - file: notebooks/ch08_cholesky/cholesky_decomposition
+      - file: notebooks/ch11_probcon/01_probabilistic_concatenation
+      - file: notebooks/ch11_probcon/02_data_link
+      - file: notebooks/ch12_gan/gan_synthetic_data
+      - file: notebooks/ch13_copula/cold_modeling_copula
+
+  - caption: Reference
+    chapters:
+      - file: reference/sklearn_synthesis_functions
