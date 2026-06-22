@@ -12,7 +12,7 @@ Companion code repository for the synthetic data monograph by prof. Angel Marche
 pip install -r requirements.txt
 jupyter notebook
 # or for a specific notebook:
-jupyter notebook notebooks/04_cholesky/cholesky_decomposition.ipynb
+jupyter notebook notebooks/ch08_cholesky/cholesky_decomposition.ipynb
 ```
 
 To inspect a notebook as a Python script:
@@ -25,6 +25,7 @@ jupyter nbconvert --to script <notebook>.ipynb --stdout
 
 ```
 notebooks/
+  00_overview/       ← guided tour: runnable examples for every method (start here)
   01_imputation/     ← supporting: missing value techniques (Ch. 2.2)
   02_oversampling/   ← supporting: imbalanced dataset handling (Ch. 3.3.1)
   03_monte_carlo/    ← supporting: Monte Carlo simulation (Ch. 6.3.3)
@@ -39,6 +40,10 @@ reference/           ← sklearn synthesis function reference
 ```
 
 Chapters 9, 10, 14, 15 from the monograph are not yet represented by notebooks.
+
+## Git Remote
+
+Push via SSH: `git@github.com:Marchev-Science/synthetic-data.git`. HTTPS auth is unavailable non-interactively.
 
 ## Notebook Paths and Data Files
 
@@ -56,16 +61,8 @@ From the monograph Ch. 6 methodological tree:
 
 ## fuzzymatcher Library
 
-`fuzzymatcher/` is a vendored copy of fuzzymatcher 0.0.5. Its public API (`__init__.py`) exposes:
-- `link_table(df_left, df_right, left_on, right_on, ...)` — scored link table
-- `fuzzy_left_join(df_left, df_right, left_on, right_on, ...)` — left join result
-
-Pipeline: `DataPreprocessor` → `DataGetter` (SQLite TF-IDF candidate index) → `Scorer` → `Matcher`.
+`fuzzymatcher/` is a vendored copy of fuzzymatcher 0.0.5. Import it by adding the repo root to `sys.path`. Public API: `link_table(...)` and `fuzzy_left_join(...)` — see `fuzzymatcher/__init__.py`.
 
 ## Pre-trained Models
 
-```python
-import tensorflow as tf
-generator     = tf.keras.models.load_model('models/generator.tf')
-discriminator = tf.keras.models.load_model('models/discriminator.tf')
-```
+Saved in `models/` as TensorFlow SavedModel format (`generator.tf`, `discriminator.tf`). Load with `tf.keras.models.load_model('models/generator.tf')`.
