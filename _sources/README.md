@@ -7,6 +7,8 @@ The accompanying synthesised dataset is published on Hugging Face:
 
 Research project НИД НИ 23/2023/В — University of National and World Economy (UNWE), Sofia.
 
+**Online book:** [marchev-science.github.io/synthetic-data](https://marchev-science.github.io/synthetic-data/) — browse the notebooks as a readable website with sidebar navigation and one-click Google Colab launch.
+
 ---
 
 ## Authors
