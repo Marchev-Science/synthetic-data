@@ -90,7 +90,9 @@ jupyter notebook
 
 ### Overview
 
-**`notebooks/00_overview/introduction.ipynb`** — Start here. A guided tour of all synthesis and preparation methods with a minimal runnable code example for each. Covers the decision guide, imputation, oversampling, SMOTE, Monte Carlo, Cholesky, Copula, GAN, and ProbCon.
+| Folder | Notebook | Description |
+|---|---|---|
+| `notebooks/00_overview/` | `introduction.ipynb` | **Start here.** Decision guide + runnable code examples for every method |
 
 ### Supporting Techniques
 
