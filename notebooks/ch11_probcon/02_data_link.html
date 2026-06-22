@@ -1,0 +1,2750 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Chapter 11 (Supplement) — Fuzzy Dataset Linking with fuzzymatcher with fuzzymatcher &#8212; Synthetic Data Generation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/ch11_probcon/02_data_link';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Chapter 12 — Generative Adversarial Networks for Tabular Data Synthesis" href="../ch12_gan/gan_synthetic_data.html" />
+    <link rel="prev" title="Chapter 11 — Probabilistic Concatenation (ProbCon) via Fuzzy Matching" href="01_probabilistic_concatenation.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Synthetic Data Generation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../00_overview/introduction.html">Introduction to Synthetic Data Generation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Supporting Techniques</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../01_imputation/01_missing_values_by_category.html">Chapter 1.1 — Imputation by Category Mean</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../01_imputation/02_missing_values_noisy_input.html">Chapter 1.2 — Distribution-Preserving Imputation via Noisy Sampling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02_oversampling/01_random_naive_oversampling.html">Chapter 2.1 — Random Naive Oversampling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02_oversampling/02_smote.html">Chapter 2.2 — SMOTE: Synthetic Minority Over-sampling Technique</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../03_monte_carlo/01_dice_distribution.html">Chapter 3.1 — Monte Carlo Simulation: Dice Probability Distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../03_monte_carlo/02_distribution_fitting.html">Chapter 3.2 — Monte Carlo Simulation with Distribution Fitting</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Algorithm Implementations</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../ch08_cholesky/cholesky_decomposition.html">Chapter 8 — Cholesky Decomposition for Correlated Data Synthesis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01_probabilistic_concatenation.html">Chapter 11 — Probabilistic Concatenation (ProbCon) via Fuzzy Matching</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Chapter 11 (Supplement) — Fuzzy Dataset Linking with <code class="docutils literal notranslate"><span class="pre">fuzzymatcher</span></code> with <code class="docutils literal notranslate"><span class="pre">fuzzymatcher</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ch12_gan/gan_synthetic_data.html">Chapter 12 — Generative Adversarial Networks for Tabular Data Synthesis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ch13_copula/cold_modeling_copula.html">Chapter 13 — Inverse Copula Sampling for Multivariate Data Synthesis</a></li>
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../reference/sklearn_synthesis_functions.html">scikit-learn Synthetic Dataset Generators</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/notebooks/ch11_probcon/02_data_link.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Chapter 11 (Supplement) — Fuzzy Dataset Linking with fuzzymatcher with fuzzymatcher</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#load-data">Load Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preview-both-datasets">Preview Both Datasets</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-matching-keys">Define Matching Keys</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-link-table">Generate Link Table</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fuzzy-left-join">Fuzzy Left Join</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#profile-report">Profile Report</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <blockquote>
+<div><p><strong>⚠ External Data Required</strong></p>
+<p>This notebook requires two Excel files that are <strong>not included</strong> in this repository:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">demogr-filtered.xlsx</span></code> — demographic survey records with columns <code class="docutils literal notranslate"><span class="pre">ind</span></code>, <code class="docutils literal notranslate"><span class="pre">sex</span></code>, <code class="docutils literal notranslate"><span class="pre">age_sim</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">big5_data.xlsx</span></code> — Big Five personality survey records with columns <code class="docutils literal notranslate"><span class="pre">id</span></code>, <code class="docutils literal notranslate"><span class="pre">gender</span></code>, <code class="docutils literal notranslate"><span class="pre">age</span></code></p></li>
+</ul>
+<p>To run this notebook, place both files in the same directory as this notebook (<code class="docutils literal notranslate"><span class="pre">notebooks/07_fuzzy_matching/</span></code>) and re-run all cells.</p>
+</div></blockquote>
+<section class="tex2jax_ignore mathjax_ignore" id="chapter-11-supplement-fuzzy-dataset-linking-with-fuzzymatcher-with-fuzzymatcher">
+<h1>Chapter 11 (Supplement) — Fuzzy Dataset Linking with <code class="docutils literal notranslate"><span class="pre">fuzzymatcher</span></code> with <code class="docutils literal notranslate"><span class="pre">fuzzymatcher</span></code><a class="headerlink" href="#chapter-11-supplement-fuzzy-dataset-linking-with-fuzzymatcher-with-fuzzymatcher" title="Permalink to this heading">#</a></h1>
+<p>This notebook demonstrates linking two real-world datasets using the <code class="docutils literal notranslate"><span class="pre">fuzzymatcher</span></code> library, which uses a SQLite-backed TF-IDF index for efficient candidate retrieval, followed by a token-level similarity score to rank matches.</p>
+<p>The two datasets share the key fields <code class="docutils literal notranslate"><span class="pre">sex</span></code>/<code class="docutils literal notranslate"><span class="pre">gender</span></code> and <code class="docutils literal notranslate"><span class="pre">age_sim</span></code>/<code class="docutils literal notranslate"><span class="pre">age</span></code>, but the field names and value codings differ — a common situation when integrating data from independent surveys.</p>
+<p><strong>Two outputs are produced:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">link_table()</span></code> — a scored link table showing all candidate matches with their similarity scores.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fuzzy_left_join()</span></code> — a left join that appends the best-matching right-table record to each left-table record.</p></li>
+</ul>
+<p><strong>When to use this approach:</strong></p>
+<ul class="simple">
+<li><p>The datasets to be linked are too large for the all-pairs Levenshtein approach in Chapter 7.1.</p></li>
+<li><p>You need a match score alongside the joined data for downstream filtering or auditing.</p></li>
+</ul>
+<section id="load-data">
+<h2>Load Data<a class="headerlink" href="#load-data" title="Permalink to this heading">#</a></h2>
+<p>Replace the paths below with the locations of your Excel files.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="c1">#import fuzzymatcher as fm</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">fuzzynoisymatcher</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fm</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sqlite3</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlite_fts4</span><span class="w"> </span><span class="kn">import</span> <span class="n">register_functions</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas_profiling</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="preview-both-datasets">
+<h2>Preview Both Datasets<a class="headerlink" href="#preview-both-datasets" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">demogr</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s1">&#39;demogr-filtered.xlsx&#39;</span><span class="p">)</span>
+<span class="n">big5</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s1">&#39;big5_data.xlsx&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">demogr</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>ind</th>
+      <th>sex</th>
+      <th>age_sim</th>
+      <th>lv_educ</th>
+      <th>empl_stat</th>
+      <th>marit_stat</th>
+      <th>house_memb</th>
+      <th>chil_u_18_y</th>
+      <th>nation</th>
+      <th>religion</th>
+      <th>...</th>
+      <th>bk_acc</th>
+      <th>ins_prop</th>
+      <th>ins_life</th>
+      <th>ins_casco</th>
+      <th>health_ins</th>
+      <th>overdraft</th>
+      <th>cons_cred</th>
+      <th>mortgage</th>
+      <th>car_leas</th>
+      <th>pens_ins</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>10001</td>
+      <td>2</td>
+      <td>52</td>
+      <td>4</td>
+      <td>4</td>
+      <td>3</td>
+      <td>2</td>
+      <td>0</td>
+      <td>1</td>
+      <td>3</td>
+      <td>...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>10002</td>
+      <td>2</td>
+      <td>66</td>
+      <td>3</td>
+      <td>3</td>
+      <td>4</td>
+      <td>4</td>
+      <td>0</td>
+      <td>1</td>
+      <td>3</td>
+      <td>...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>10003</td>
+      <td>2</td>
+      <td>40</td>
+      <td>4</td>
+      <td>3</td>
+      <td>2</td>
+      <td>4</td>
+      <td>0</td>
+      <td>1</td>
+      <td>3</td>
+      <td>...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>10005</td>
+      <td>2</td>
+      <td>54</td>
+      <td>3</td>
+      <td>4</td>
+      <td>2</td>
+      <td>4</td>
+      <td>0</td>
+      <td>1</td>
+      <td>4</td>
+      <td>...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>10006</td>
+      <td>1</td>
+      <td>40</td>
+      <td>4</td>
+      <td>3</td>
+      <td>4</td>
+      <td>7</td>
+      <td>4</td>
+      <td>1</td>
+      <td>3</td>
+      <td>...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 49 columns</p>
+</div></div></div>
+</div>
+</section>
+<section id="define-matching-keys">
+<h2>Define Matching Keys<a class="headerlink" href="#define-matching-keys" title="Permalink to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">left_on</span></code> and <code class="docutils literal notranslate"><span class="pre">right_on</span></code> specify the columns in each dataset to use as matching keys.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">big5</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>age</th>
+      <th>gender</th>
+      <th>extrav</th>
+      <th>neurot</th>
+      <th>agreeab</th>
+      <th>conscient</th>
+      <th>openness</th>
+      <th>id</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>53</td>
+      <td>1</td>
+      <td>4.4</td>
+      <td>4.9</td>
+      <td>4.6</td>
+      <td>4.7</td>
+      <td>4.3</td>
+      <td>20001</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>46</td>
+      <td>2</td>
+      <td>2.2</td>
+      <td>2.9</td>
+      <td>3.5</td>
+      <td>4.2</td>
+      <td>2.6</td>
+      <td>20002</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>14</td>
+      <td>2</td>
+      <td>3.5</td>
+      <td>1.4</td>
+      <td>3.8</td>
+      <td>4.9</td>
+      <td>4.5</td>
+      <td>20003</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>19</td>
+      <td>2</td>
+      <td>2.2</td>
+      <td>1.7</td>
+      <td>3.7</td>
+      <td>2.6</td>
+      <td>4.1</td>
+      <td>20004</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>25</td>
+      <td>2</td>
+      <td>3.4</td>
+      <td>3.0</td>
+      <td>4.4</td>
+      <td>3.4</td>
+      <td>3.4</td>
+      <td>20005</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="generate-link-table">
+<h2>Generate Link Table<a class="headerlink" href="#generate-link-table" title="Permalink to this heading">#</a></h2>
+<p>The link table shows all candidate matches with their fuzzy match scores.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">left_on</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;sex&quot;</span><span class="p">,</span> <span class="s2">&quot;age_sim&quot;</span><span class="p">]</span>
+<span class="n">right_on</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;gender&quot;</span><span class="p">,</span> <span class="s2">&quot;age&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">match_table</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">link_table</span><span class="p">(</span><span class="n">demogr</span><span class="p">,</span> <span class="n">big5</span><span class="p">,</span> <span class="n">left_on</span><span class="p">,</span> <span class="n">right_on</span><span class="p">,</span> <span class="n">left_id_col</span><span class="o">=</span><span class="s1">&#39;ind&#39;</span><span class="p">,</span> <span class="n">right_id_col</span><span class="o">=</span><span class="s1">&#39;id&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="fuzzy-left-join">
+<h2>Fuzzy Left Join<a class="headerlink" href="#fuzzy-left-join" title="Permalink to this heading">#</a></h2>
+<p>The left join appends the best-matching right-side record to each left-side record.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">match_table</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">50</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>__id_left</th>
+      <th>__id_right</th>
+      <th>match_score</th>
+      <th>match_rank</th>
+      <th>sex</th>
+      <th>gender</th>
+      <th>age_sim</th>
+      <th>age</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>10001</td>
+      <td>27163</td>
+      <td>0.072145</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>10001</td>
+      <td>32407</td>
+      <td>0.071044</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>10001</td>
+      <td>31056</td>
+      <td>0.068877</td>
+      <td>3</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>10001</td>
+      <td>33594</td>
+      <td>0.068146</td>
+      <td>4</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>10001</td>
+      <td>28854</td>
+      <td>0.067393</td>
+      <td>5</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>10001</td>
+      <td>24299</td>
+      <td>0.067339</td>
+      <td>6</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>10001</td>
+      <td>31580</td>
+      <td>0.066097</td>
+      <td>7</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>10001</td>
+      <td>34235</td>
+      <td>0.065817</td>
+      <td>8</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>10001</td>
+      <td>34822</td>
+      <td>0.065565</td>
+      <td>9</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>10001</td>
+      <td>30840</td>
+      <td>0.065329</td>
+      <td>10</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>10001</td>
+      <td>31011</td>
+      <td>0.065218</td>
+      <td>11</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>10001</td>
+      <td>21333</td>
+      <td>0.065014</td>
+      <td>12</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>10001</td>
+      <td>26832</td>
+      <td>0.064738</td>
+      <td>13</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>10001</td>
+      <td>20025</td>
+      <td>0.064620</td>
+      <td>14</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>10001</td>
+      <td>29531</td>
+      <td>0.064561</td>
+      <td>15</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>10001</td>
+      <td>28523</td>
+      <td>0.064121</td>
+      <td>16</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>10001</td>
+      <td>32136</td>
+      <td>0.063722</td>
+      <td>17</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>10001</td>
+      <td>30149</td>
+      <td>0.063389</td>
+      <td>18</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>10001</td>
+      <td>25439</td>
+      <td>0.063170</td>
+      <td>19</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>10001</td>
+      <td>27598</td>
+      <td>0.063075</td>
+      <td>20</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>10001</td>
+      <td>32413</td>
+      <td>0.062994</td>
+      <td>21</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>10001</td>
+      <td>24204</td>
+      <td>0.062828</td>
+      <td>22</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>10001</td>
+      <td>28917</td>
+      <td>0.062776</td>
+      <td>23</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>10001</td>
+      <td>22839</td>
+      <td>0.062776</td>
+      <td>24</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>10001</td>
+      <td>29085</td>
+      <td>0.062493</td>
+      <td>25</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>10001</td>
+      <td>23724</td>
+      <td>0.062385</td>
+      <td>26</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>10001</td>
+      <td>34242</td>
+      <td>0.062299</td>
+      <td>27</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>10001</td>
+      <td>25545</td>
+      <td>0.061914</td>
+      <td>28</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>10001</td>
+      <td>20614</td>
+      <td>0.061826</td>
+      <td>29</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>10001</td>
+      <td>29519</td>
+      <td>0.061652</td>
+      <td>30</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>30</th>
+      <td>10001</td>
+      <td>24404</td>
+      <td>0.061619</td>
+      <td>31</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <td>10001</td>
+      <td>31797</td>
+      <td>0.061437</td>
+      <td>32</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>32</th>
+      <td>10001</td>
+      <td>32593</td>
+      <td>0.061225</td>
+      <td>33</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>33</th>
+      <td>10001</td>
+      <td>29991</td>
+      <td>0.060978</td>
+      <td>34</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>34</th>
+      <td>10001</td>
+      <td>23196</td>
+      <td>0.060708</td>
+      <td>35</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>35</th>
+      <td>10001</td>
+      <td>25620</td>
+      <td>0.060640</td>
+      <td>36</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>36</th>
+      <td>10001</td>
+      <td>33863</td>
+      <td>0.060202</td>
+      <td>37</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>37</th>
+      <td>10001</td>
+      <td>30324</td>
+      <td>0.060051</td>
+      <td>38</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>38</th>
+      <td>10001</td>
+      <td>25135</td>
+      <td>0.059847</td>
+      <td>39</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>39</th>
+      <td>10001</td>
+      <td>24331</td>
+      <td>0.059810</td>
+      <td>40</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>40</th>
+      <td>10001</td>
+      <td>24345</td>
+      <td>0.059775</td>
+      <td>41</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>41</th>
+      <td>10001</td>
+      <td>20599</td>
+      <td>0.058982</td>
+      <td>42</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>42</th>
+      <td>10001</td>
+      <td>29513</td>
+      <td>0.058578</td>
+      <td>43</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>43</th>
+      <td>10001</td>
+      <td>21283</td>
+      <td>0.058063</td>
+      <td>44</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>44</th>
+      <td>10001</td>
+      <td>31787</td>
+      <td>0.057950</td>
+      <td>45</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>45</th>
+      <td>10001</td>
+      <td>24521</td>
+      <td>0.057299</td>
+      <td>46</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>46</th>
+      <td>10001</td>
+      <td>27109</td>
+      <td>0.057045</td>
+      <td>47</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>47</th>
+      <td>10001</td>
+      <td>27120</td>
+      <td>0.056866</td>
+      <td>48</td>
+      <td>2</td>
+      <td>2</td>
+      <td>52</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>48</th>
+      <td>10002</td>
+      <td>30329</td>
+      <td>0.072767</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>66</td>
+      <td>66</td>
+    </tr>
+    <tr>
+      <th>49</th>
+      <td>10002</td>
+      <td>35246</td>
+      <td>0.070404</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>66</td>
+      <td>66</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">matched_results</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">fuzzy_left_join</span><span class="p">(</span><span class="n">demogr</span><span class="p">,</span> <span class="n">big5</span><span class="p">,</span> <span class="n">left_on</span><span class="p">,</span> <span class="n">right_on</span><span class="p">,</span> <span class="n">left_id_col</span><span class="o">=</span><span class="s1">&#39;ind&#39;</span><span class="p">,</span> <span class="n">right_id_col</span><span class="o">=</span><span class="s1">&#39;id&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="profile-report">
+<h2>Profile Report<a class="headerlink" href="#profile-report" title="Permalink to this heading">#</a></h2>
+<p>Generate a pandas-profiling report of the merged result.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">matched_results</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">50</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>best_match_score</th>
+      <th>__id_left</th>
+      <th>__id_right</th>
+      <th>ind</th>
+      <th>sex</th>
+      <th>age_sim</th>
+      <th>lv_educ</th>
+      <th>empl_stat</th>
+      <th>marit_stat</th>
+      <th>house_memb</th>
+      <th>...</th>
+      <th>car_leas</th>
+      <th>pens_ins</th>
+      <th>age</th>
+      <th>gender</th>
+      <th>extrav</th>
+      <th>neurot</th>
+      <th>agreeab</th>
+      <th>conscient</th>
+      <th>openness</th>
+      <th>id</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.075021</td>
+      <td>10001</td>
+      <td>25135</td>
+      <td>10001</td>
+      <td>2</td>
+      <td>52</td>
+      <td>4</td>
+      <td>4</td>
+      <td>3</td>
+      <td>2</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>52</td>
+      <td>2</td>
+      <td>3.9</td>
+      <td>3.4</td>
+      <td>4.4</td>
+      <td>3.3</td>
+      <td>3.4</td>
+      <td>25135</td>
+    </tr>
+    <tr>
+      <th>48</th>
+      <td>0.078626</td>
+      <td>10002</td>
+      <td>27636</td>
+      <td>10002</td>
+      <td>2</td>
+      <td>66</td>
+      <td>3</td>
+      <td>3</td>
+      <td>4</td>
+      <td>4</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>66</td>
+      <td>2</td>
+      <td>4.3</td>
+      <td>4.4</td>
+      <td>4.9</td>
+      <td>4.1</td>
+      <td>4.3</td>
+      <td>27636</td>
+    </tr>
+    <tr>
+      <th>59</th>
+      <td>0.070214</td>
+      <td>10003</td>
+      <td>23546</td>
+      <td>10003</td>
+      <td>2</td>
+      <td>40</td>
+      <td>4</td>
+      <td>3</td>
+      <td>2</td>
+      <td>4</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>40</td>
+      <td>2</td>
+      <td>2.1</td>
+      <td>1.6</td>
+      <td>4.7</td>
+      <td>4.3</td>
+      <td>3.5</td>
+      <td>23546</td>
+    </tr>
+    <tr>
+      <th>109</th>
+      <td>0.070257</td>
+      <td>10005</td>
+      <td>29895</td>
+      <td>10005</td>
+      <td>2</td>
+      <td>54</td>
+      <td>3</td>
+      <td>4</td>
+      <td>2</td>
+      <td>4</td>
+      <td>...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>54</td>
+      <td>2</td>
+      <td>2.5</td>
+      <td>3.1</td>
+      <td>3.5</td>
+      <td>3.0</td>
+      <td>2.8</td>
+      <td>29895</td>
+    </tr>
+    <tr>
+      <th>155</th>
+      <td>0.072985</td>
+      <td>10006</td>
+      <td>21525</td>
+      <td>10006</td>
+      <td>1</td>
+      <td>40</td>
+      <td>4</td>
+      <td>3</td>
+      <td>4</td>
+      <td>7</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>40</td>
+      <td>1</td>
+      <td>4.1</td>
+      <td>3.7</td>
+      <td>2.8</td>
+      <td>3.0</td>
+      <td>4.7</td>
+      <td>21525</td>
+    </tr>
+    <tr>
+      <th>205</th>
+      <td>0.055850</td>
+      <td>10007</td>
+      <td>20691</td>
+      <td>10007</td>
+      <td>2</td>
+      <td>27</td>
+      <td>4</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>27</td>
+      <td>2</td>
+      <td>2.8</td>
+      <td>3.4</td>
+      <td>3.9</td>
+      <td>3.6</td>
+      <td>4.2</td>
+      <td>20691</td>
+    </tr>
+    <tr>
+      <th>255</th>
+      <td>0.064302</td>
+      <td>10008</td>
+      <td>25603</td>
+      <td>10008</td>
+      <td>2</td>
+      <td>35</td>
+      <td>4</td>
+      <td>3</td>
+      <td>1</td>
+      <td>3</td>
+      <td>...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>35</td>
+      <td>2</td>
+      <td>5.0</td>
+      <td>2.9</td>
+      <td>5.0</td>
+      <td>3.5</td>
+      <td>4.4</td>
+      <td>25603</td>
+    </tr>
+    <tr>
+      <th>305</th>
+      <td>0.072869</td>
+      <td>10010</td>
+      <td>30898</td>
+      <td>10010</td>
+      <td>1</td>
+      <td>59</td>
+      <td>4</td>
+      <td>3</td>
+      <td>2</td>
+      <td>3</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>59</td>
+      <td>1</td>
+      <td>3.9</td>
+      <td>4.6</td>
+      <td>4.4</td>
+      <td>3.8</td>
+      <td>4.2</td>
+      <td>30898</td>
+    </tr>
+    <tr>
+      <th>320</th>
+      <td>0.061419</td>
+      <td>10012</td>
+      <td>24242</td>
+      <td>10012</td>
+      <td>1</td>
+      <td>26</td>
+      <td>4</td>
+      <td>3</td>
+      <td>2</td>
+      <td>1</td>
+      <td>...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>26</td>
+      <td>1</td>
+      <td>3.4</td>
+      <td>2.6</td>
+      <td>4.2</td>
+      <td>2.3</td>
+      <td>4.7</td>
+      <td>24242</td>
+    </tr>
+    <tr>
+      <th>370</th>
+      <td>0.070109</td>
+      <td>10014</td>
+      <td>23689</td>
+      <td>10014</td>
+      <td>2</td>
+      <td>60</td>
+      <td>4</td>
+      <td>4</td>
+      <td>2</td>
+      <td>4</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>60</td>
+      <td>2</td>
+      <td>4.1</td>
+      <td>3.6</td>
+      <td>4.8</td>
+      <td>3.3</td>
+      <td>5.0</td>
+      <td>23689</td>
+    </tr>
+    <tr>
+      <th>397</th>
+      <td>0.062189</td>
+      <td>10015</td>
+      <td>22027</td>
+      <td>10015</td>
+      <td>1</td>
+      <td>26</td>
+      <td>4</td>
+      <td>3</td>
+      <td>4</td>
+      <td>5</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>26</td>
+      <td>1</td>
+      <td>1.2</td>
+      <td>2.5</td>
+      <td>3.7</td>
+      <td>2.5</td>
+      <td>3.4</td>
+      <td>22027</td>
+    </tr>
+    <tr>
+      <th>447</th>
+      <td>0.068618</td>
+      <td>10016</td>
+      <td>25558</td>
+      <td>10016</td>
+      <td>2</td>
+      <td>43</td>
+      <td>4</td>
+      <td>3</td>
+      <td>2</td>
+      <td>2</td>
+      <td>...</td>
+      <td>0</td>
+      <td>1</td>
+      <td>43</td>
+      <td>2</td>
+      <td>4.6</td>
+      <td>4.6</td>
+      <td>4.8</td>
+      <td>3.2</td>
+      <td>4.7</td>
+      <td>25558</td>
+    </tr>
+    <tr>
+      <th>497</th>
+      <td>0.073500</td>
+      <td>10018</td>
+      <td>21463</td>
+      <td>10018</td>
+      <td>1</td>
+      <td>34</td>
+      <td>5</td>
+      <td>4</td>
+      <td>4</td>
+      <td>2</td>
+      <td>...</td>
+      <td>0</td>
+      <td>1</td>
+      <td>34</td>
+      <td>1</td>
+      <td>2.4</td>
+      <td>2.4</td>
+      <td>2.2</td>
+      <td>2.1</td>
+      <td>4.3</td>
+      <td>21463</td>
+    </tr>
+    <tr>
+      <th>547</th>
+      <td>0.073164</td>
+      <td>10019</td>
+      <td>32492</td>
+      <td>10019</td>
+      <td>2</td>
+      <td>69</td>
+      <td>4</td>
+      <td>3</td>
+      <td>1</td>
+      <td>5</td>
+      <td>...</td>
+      <td>0</td>
+      <td>1</td>
+      <td>69</td>
+      <td>2</td>
+      <td>1.4</td>
+      <td>1.8</td>
+      <td>3.2</td>
+      <td>3.2</td>
+      <td>4.5</td>
+      <td>32492</td>
+    </tr>
+    <tr>
+      <th>554</th>
+      <td>0.069616</td>
+      <td>10020</td>
+      <td>23348</td>
+      <td>10020</td>
+      <td>1</td>
+      <td>31</td>
+      <td>4</td>
+      <td>4</td>
+      <td>1</td>
+      <td>2</td>
+      <td>...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>31</td>
+      <td>1</td>
+      <td>4.3</td>
+      <td>3.4</td>
+      <td>3.8</td>
+      <td>2.9</td>
+      <td>4.7</td>
+      <td>23348</td>
+    </tr>
+    <tr>
+      <th>604</th>
+      <td>0.066159</td>
+      <td>10023</td>
+      <td>25398</td>
+      <td>10023</td>
+      <td>2</td>
+      <td>45</td>
+      <td>4</td>
+      <td>3</td>
+      <td>2</td>
+      <td>2</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>45</td>
+      <td>2</td>
+      <td>4.6</td>
+      <td>3.8</td>
+      <td>4.7</td>
+      <td>2.7</td>
+      <td>3.3</td>
+      <td>25398</td>
+    </tr>
+    <tr>
+      <th>654</th>
+      <td>0.058870</td>
+      <td>10024</td>
+      <td>23064</td>
+      <td>10024</td>
+      <td>2</td>
+      <td>29</td>
+      <td>4</td>
+      <td>3</td>
+      <td>2</td>
+      <td>3</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>29</td>
+      <td>2</td>
+      <td>2.3</td>
+      <td>2.5</td>
+      <td>4.5</td>
+      <td>2.8</td>
+      <td>2.9</td>
+      <td>23064</td>
+    </tr>
+    <tr>
+      <th>704</th>
+      <td>0.068901</td>
+      <td>10026</td>
+      <td>21603</td>
+      <td>10026</td>
+      <td>2</td>
+      <td>46</td>
+      <td>4</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>46</td>
+      <td>2</td>
+      <td>3.6</td>
+      <td>3.3</td>
+      <td>3.8</td>
+      <td>3.7</td>
+      <td>3.6</td>
+      <td>21603</td>
+    </tr>
+    <tr>
+      <th>754</th>
+      <td>0.069180</td>
+      <td>10027</td>
+      <td>21281</td>
+      <td>10027</td>
+      <td>2</td>
+      <td>37</td>
+      <td>5</td>
+      <td>3</td>
+      <td>4</td>
+      <td>4</td>
+      <td>...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>37</td>
+      <td>2</td>
+      <td>2.4</td>
+      <td>2.4</td>
+      <td>3.4</td>
+      <td>3.7</td>
+      <td>2.6</td>
+      <td>21281</td>
+    </tr>
+    <tr>
+      <th>804</th>
+      <td>0.076294</td>
+      <td>10028</td>
+      <td>34968</td>
+      <td>10028</td>
+      <td>1</td>
+      <td>62</td>
+      <td>3</td>
+      <td>3</td>
+      <td>2</td>
+      <td>2</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>62</td>
+      <td>1</td>
+      <td>4.8</td>
+      <td>4.5</td>
+      <td>3.3</td>
+      <td>4.1</td>
+      <td>4.7</td>
+      <td>34968</td>
+    </tr>
+    <tr>
+      <th>821</th>
+      <td>0.056548</td>
+      <td>10029</td>
+      <td>22301</td>
+      <td>10029</td>
+      <td>2</td>
+      <td>26</td>
+      <td>3</td>
+      <td>4</td>
+      <td>1</td>
+      <td>4</td>
+      <td>...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>26</td>
+      <td>2</td>
+      <td>1.9</td>
+      <td>1.2</td>
+      <td>2.8</td>
+      <td>4.8</td>
+      <td>4.6</td>
+      <td>22301</td>
+    </tr>
+    <tr>
+      <th>871</th>
+      <td>0.066988</td>
+      <td>10030</td>
+      <td>20796</td>
+      <td>10030</td>
+      <td>2</td>
+      <td>36</td>
+      <td>4</td>
+      <td>3</td>
+      <td>2</td>
+      <td>3</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>36</td>
+      <td>2</td>
+      <td>3.4</td>
+      <td>2.2</td>
+      <td>4.0</td>
+      <td>4.1</td>
+      <td>3.3</td>
+      <td>20796</td>
+    </tr>
+    <tr>
+      <th>921</th>
+      <td>0.076804</td>
+      <td>10031</td>
+      <td>28945</td>
+      <td>10031</td>
+      <td>1</td>
+      <td>57</td>
+      <td>4</td>
+      <td>4</td>
+      <td>1</td>
+      <td>1</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>57</td>
+      <td>1</td>
+      <td>4.5</td>
+      <td>2.6</td>
+      <td>3.8</td>
+      <td>3.6</td>
+      <td>2.8</td>
+      <td>28945</td>
+    </tr>
+    <tr>
+      <th>944</th>
+      <td>0.081171</td>
+      <td>10032</td>
+      <td>30969</td>
+      <td>10032</td>
+      <td>1</td>
+      <td>68</td>
+      <td>4</td>
+      <td>3</td>
+      <td>2</td>
+      <td>1</td>
+      <td>...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>68</td>
+      <td>1</td>
+      <td>3.6</td>
+      <td>3.6</td>
+      <td>3.9</td>
+      <td>2.7</td>
+      <td>3.9</td>
+      <td>30969</td>
+    </tr>
+    <tr>
+      <th>951</th>
+      <td>0.055413</td>
+      <td>10033</td>
+      <td>30929</td>
+      <td>10033</td>
+      <td>1</td>
+      <td>75</td>
+      <td>3</td>
+      <td>3</td>
+      <td>2</td>
+      <td>3</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>75</td>
+      <td>2</td>
+      <td>4.6</td>
+      <td>2.8</td>
+      <td>5.0</td>
+      <td>4.3</td>
+      <td>3.6</td>
+      <td>30929</td>
+    </tr>
+    <tr>
+      <th>1006</th>
+      <td>0.076331</td>
+      <td>10034</td>
+      <td>28841</td>
+      <td>10034</td>
+      <td>1</td>
+      <td>51</td>
+      <td>3</td>
+      <td>3</td>
+      <td>4</td>
+      <td>2</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>51</td>
+      <td>1</td>
+      <td>4.2</td>
+      <td>5.0</td>
+      <td>4.4</td>
+      <td>4.5</td>
+      <td>3.6</td>
+      <td>28841</td>
+    </tr>
+    <tr>
+      <th>1031</th>
+      <td>0.089711</td>
+      <td>10035</td>
+      <td>21305</td>
+      <td>10035</td>
+      <td>1</td>
+      <td>69</td>
+      <td>3</td>
+      <td>3</td>
+      <td>1</td>
+      <td>1</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>69</td>
+      <td>1</td>
+      <td>2.2</td>
+      <td>2.8</td>
+      <td>4.7</td>
+      <td>4.8</td>
+      <td>3.7</td>
+      <td>21305</td>
+    </tr>
+    <tr>
+      <th>1034</th>
+      <td>0.078385</td>
+      <td>10038</td>
+      <td>31952</td>
+      <td>10038</td>
+      <td>1</td>
+      <td>54</td>
+      <td>3</td>
+      <td>4</td>
+      <td>1</td>
+      <td>2</td>
+      <td>...</td>
+      <td>0</td>
+      <td>1</td>
+      <td>54</td>
+      <td>1</td>
+      <td>4.7</td>
+      <td>2.5</td>
+      <td>4.2</td>
+      <td>4.5</td>
+      <td>5.0</td>
+      <td>31952</td>
+    </tr>
+    <tr>
+      <th>1062</th>
+      <td>0.076544</td>
+      <td>10039</td>
+      <td>35304</td>
+      <td>10039</td>
+      <td>1</td>
+      <td>51</td>
+      <td>4</td>
+      <td>3</td>
+      <td>2</td>
+      <td>2</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>51</td>
+      <td>1</td>
+      <td>2.2</td>
+      <td>3.7</td>
+      <td>4.4</td>
+      <td>3.4</td>
+      <td>4.2</td>
+      <td>35304</td>
+    </tr>
+    <tr>
+      <th>1087</th>
+      <td>0.059528</td>
+      <td>10040</td>
+      <td>21659</td>
+      <td>10040</td>
+      <td>2</td>
+      <td>30</td>
+      <td>4</td>
+      <td>5</td>
+      <td>1</td>
+      <td>2</td>
+      <td>...</td>
+      <td>1</td>
+      <td>1</td>
+      <td>30</td>
+      <td>2</td>
+      <td>3.4</td>
+      <td>1.5</td>
+      <td>4.4</td>
+      <td>2.6</td>
+      <td>4.9</td>
+      <td>21659</td>
+    </tr>
+    <tr>
+      <th>1137</th>
+      <td>0.074951</td>
+      <td>10042</td>
+      <td>30662</td>
+      <td>10042</td>
+      <td>1</td>
+      <td>54</td>
+      <td>5</td>
+      <td>4</td>
+      <td>4</td>
+      <td>2</td>
+      <td>...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>54</td>
+      <td>1</td>
+      <td>3.2</td>
+      <td>3.1</td>
+      <td>3.5</td>
+      <td>2.7</td>
+      <td>3.2</td>
+      <td>30662</td>
+    </tr>
+    <tr>
+      <th>1165</th>
+      <td>0.069167</td>
+      <td>10043</td>
+      <td>34807</td>
+      <td>10043</td>
+      <td>1</td>
+      <td>69</td>
+      <td>3</td>
+      <td>3</td>
+      <td>2</td>
+      <td>1</td>
+      <td>...</td>
+      <td>0</td>
+      <td>1</td>
+      <td>69</td>
+      <td>1</td>
+      <td>2.3</td>
+      <td>3.4</td>
+      <td>3.1</td>
+      <td>3.0</td>
+      <td>3.6</td>
+      <td>34807</td>
+    </tr>
+    <tr>
+      <th>1168</th>
+      <td>0.062838</td>
+      <td>10046</td>
+      <td>25593</td>
+      <td>10046</td>
+      <td>2</td>
+      <td>75</td>
+      <td>5</td>
+      <td>3</td>
+      <td>2</td>
+      <td>2</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>75</td>
+      <td>2</td>
+      <td>3.4</td>
+      <td>2.4</td>
+      <td>4.4</td>
+      <td>4.2</td>
+      <td>4.7</td>
+      <td>25593</td>
+    </tr>
+    <tr>
+      <th>1173</th>
+      <td>0.072873</td>
+      <td>10047</td>
+      <td>29470</td>
+      <td>10047</td>
+      <td>1</td>
+      <td>66</td>
+      <td>3</td>
+      <td>4</td>
+      <td>4</td>
+      <td>2</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>66</td>
+      <td>1</td>
+      <td>3.4</td>
+      <td>2.9</td>
+      <td>4.7</td>
+      <td>4.4</td>
+      <td>4.4</td>
+      <td>29470</td>
+    </tr>
+    <tr>
+      <th>1178</th>
+      <td>0.073490</td>
+      <td>10048</td>
+      <td>20591</td>
+      <td>10048</td>
+      <td>2</td>
+      <td>59</td>
+      <td>4</td>
+      <td>4</td>
+      <td>2</td>
+      <td>2</td>
+      <td>...</td>
+      <td>1</td>
+      <td>1</td>
+      <td>59</td>
+      <td>2</td>
+      <td>3.5</td>
+      <td>2.9</td>
+      <td>4.0</td>
+      <td>3.4</td>
+      <td>4.6</td>
+      <td>20591</td>
+    </tr>
+    <tr>
+      <th>1198</th>
+      <td>0.073971</td>
+      <td>10052</td>
+      <td>21275</td>
+      <td>10052</td>
+      <td>1</td>
+      <td>39</td>
+      <td>4</td>
+      <td>3</td>
+      <td>1</td>
+      <td>1</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>39</td>
+      <td>1</td>
+      <td>3.1</td>
+      <td>3.9</td>
+      <td>4.3</td>
+      <td>3.8</td>
+      <td>4.4</td>
+      <td>21275</td>
+    </tr>
+    <tr>
+      <th>1248</th>
+      <td>0.067897</td>
+      <td>10054</td>
+      <td>27544</td>
+      <td>10054</td>
+      <td>2</td>
+      <td>45</td>
+      <td>4</td>
+      <td>3</td>
+      <td>2</td>
+      <td>2</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>45</td>
+      <td>2</td>
+      <td>4.0</td>
+      <td>4.1</td>
+      <td>3.8</td>
+      <td>4.3</td>
+      <td>4.6</td>
+      <td>27544</td>
+    </tr>
+    <tr>
+      <th>1298</th>
+      <td>0.068169</td>
+      <td>10056</td>
+      <td>24324</td>
+      <td>10056</td>
+      <td>2</td>
+      <td>40</td>
+      <td>4</td>
+      <td>3</td>
+      <td>1</td>
+      <td>1</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>40</td>
+      <td>2</td>
+      <td>3.7</td>
+      <td>3.5</td>
+      <td>4.3</td>
+      <td>4.2</td>
+      <td>4.3</td>
+      <td>24324</td>
+    </tr>
+    <tr>
+      <th>1348</th>
+      <td>0.066458</td>
+      <td>10057</td>
+      <td>24723</td>
+      <td>10057</td>
+      <td>1</td>
+      <td>30</td>
+      <td>5</td>
+      <td>4</td>
+      <td>2</td>
+      <td>4</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>30</td>
+      <td>1</td>
+      <td>3.5</td>
+      <td>4.9</td>
+      <td>3.4</td>
+      <td>4.0</td>
+      <td>4.7</td>
+      <td>24723</td>
+    </tr>
+    <tr>
+      <th>1398</th>
+      <td>0.062914</td>
+      <td>10058</td>
+      <td>24120</td>
+      <td>10058</td>
+      <td>1</td>
+      <td>28</td>
+      <td>5</td>
+      <td>3</td>
+      <td>4</td>
+      <td>5</td>
+      <td>...</td>
+      <td>0</td>
+      <td>1</td>
+      <td>28</td>
+      <td>1</td>
+      <td>2.1</td>
+      <td>1.8</td>
+      <td>2.8</td>
+      <td>3.1</td>
+      <td>2.4</td>
+      <td>24120</td>
+    </tr>
+    <tr>
+      <th>1448</th>
+      <td>0.066835</td>
+      <td>10060</td>
+      <td>21586</td>
+      <td>10060</td>
+      <td>1</td>
+      <td>69</td>
+      <td>4</td>
+      <td>4</td>
+      <td>2</td>
+      <td>2</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>69</td>
+      <td>1</td>
+      <td>2.0</td>
+      <td>4.6</td>
+      <td>3.6</td>
+      <td>3.0</td>
+      <td>4.9</td>
+      <td>21586</td>
+    </tr>
+    <tr>
+      <th>1451</th>
+      <td>0.071202</td>
+      <td>10061</td>
+      <td>32435</td>
+      <td>10061</td>
+      <td>1</td>
+      <td>67</td>
+      <td>4</td>
+      <td>3</td>
+      <td>2</td>
+      <td>2</td>
+      <td>...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>67</td>
+      <td>1</td>
+      <td>3.7</td>
+      <td>3.8</td>
+      <td>3.8</td>
+      <td>3.7</td>
+      <td>4.3</td>
+      <td>32435</td>
+    </tr>
+    <tr>
+      <th>1455</th>
+      <td>0.055910</td>
+      <td>10062</td>
+      <td>22286</td>
+      <td>10062</td>
+      <td>2</td>
+      <td>27</td>
+      <td>4</td>
+      <td>3</td>
+      <td>1</td>
+      <td>2</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>27</td>
+      <td>2</td>
+      <td>4.4</td>
+      <td>2.8</td>
+      <td>4.9</td>
+      <td>2.3</td>
+      <td>4.7</td>
+      <td>22286</td>
+    </tr>
+    <tr>
+      <th>1505</th>
+      <td>0.073467</td>
+      <td>10063</td>
+      <td>27659</td>
+      <td>10063</td>
+      <td>2</td>
+      <td>54</td>
+      <td>4</td>
+      <td>3</td>
+      <td>2</td>
+      <td>5</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>54</td>
+      <td>2</td>
+      <td>4.5</td>
+      <td>3.3</td>
+      <td>4.7</td>
+      <td>4.6</td>
+      <td>5.0</td>
+      <td>27659</td>
+    </tr>
+    <tr>
+      <th>1551</th>
+      <td>0.072975</td>
+      <td>10064</td>
+      <td>24095</td>
+      <td>10064</td>
+      <td>1</td>
+      <td>45</td>
+      <td>4</td>
+      <td>3</td>
+      <td>1</td>
+      <td>2</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>45</td>
+      <td>1</td>
+      <td>2.3</td>
+      <td>3.4</td>
+      <td>4.4</td>
+      <td>3.2</td>
+      <td>4.1</td>
+      <td>24095</td>
+    </tr>
+    <tr>
+      <th>1601</th>
+      <td>0.069460</td>
+      <td>10065</td>
+      <td>22973</td>
+      <td>10065</td>
+      <td>1</td>
+      <td>73</td>
+      <td>4</td>
+      <td>3</td>
+      <td>2</td>
+      <td>6</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>73</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>2.4</td>
+      <td>4.6</td>
+      <td>4.0</td>
+      <td>4.4</td>
+      <td>22973</td>
+    </tr>
+    <tr>
+      <th>1602</th>
+      <td>0.061490</td>
+      <td>10066</td>
+      <td>22450</td>
+      <td>10066</td>
+      <td>2</td>
+      <td>31</td>
+      <td>5</td>
+      <td>3</td>
+      <td>2</td>
+      <td>3</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>31</td>
+      <td>2</td>
+      <td>4.0</td>
+      <td>3.7</td>
+      <td>3.6</td>
+      <td>3.9</td>
+      <td>4.1</td>
+      <td>22450</td>
+    </tr>
+    <tr>
+      <th>1652</th>
+      <td>0.062074</td>
+      <td>10067</td>
+      <td>20137</td>
+      <td>10067</td>
+      <td>2</td>
+      <td>31</td>
+      <td>5</td>
+      <td>3</td>
+      <td>1</td>
+      <td>2</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>31</td>
+      <td>2</td>
+      <td>5.0</td>
+      <td>2.0</td>
+      <td>4.5</td>
+      <td>2.6</td>
+      <td>3.9</td>
+      <td>20137</td>
+    </tr>
+    <tr>
+      <th>1702</th>
+      <td>0.071393</td>
+      <td>10068</td>
+      <td>32231</td>
+      <td>10068</td>
+      <td>1</td>
+      <td>55</td>
+      <td>5</td>
+      <td>3</td>
+      <td>2</td>
+      <td>3</td>
+      <td>...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>55</td>
+      <td>1</td>
+      <td>4.8</td>
+      <td>4.1</td>
+      <td>5.0</td>
+      <td>4.7</td>
+      <td>4.8</td>
+      <td>32231</td>
+    </tr>
+    <tr>
+      <th>1728</th>
+      <td>0.068862</td>
+      <td>10069</td>
+      <td>26596</td>
+      <td>10069</td>
+      <td>2</td>
+      <td>42</td>
+      <td>4</td>
+      <td>3</td>
+      <td>3</td>
+      <td>3</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>42</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>2.3</td>
+      <td>4.1</td>
+      <td>4.1</td>
+      <td>4.6</td>
+      <td>26596</td>
+    </tr>
+  </tbody>
+</table>
+<p>50 rows × 60 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">matched_results</span><span class="o">.</span><span class="n">profile_report</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ipykernel_31831</span><span class="o">/</span><span class="mf">1743137490.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">matched_results</span><span class="o">.</span><span class="n">profile_report</span><span class="p">()</span>
+
+<span class="ne">NameError</span>: name &#39;matched_results&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">del</span> <span class="n">matched_results</span><span class="p">[</span><span class="s1">&#39;corp_oblig&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">KeyError</span><span class="g g-Whitespace">                                  </span>Traceback (most recent call last)
+<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">15</span><span class="o">-</span><span class="n">ac148c0636af</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">matched_results</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;corp_oblig&#39;</span><span class="p">])</span>
+
+<span class="nn">~\AppData\Roaming\Python\Python37\site-packages\pandas\core\frame.py</span> in <span class="ni">drop</span><span class="nt">(self, labels, axis, index, columns, level, inplace, errors)</span>
+<span class="g g-Whitespace">   </span><span class="mi">4310</span>             <span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">4311</span>             <span class="n">inplace</span><span class="o">=</span><span class="n">inplace</span><span class="p">,</span>
+<span class="ne">-&gt; </span><span class="mi">4312</span>             <span class="n">errors</span><span class="o">=</span><span class="n">errors</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">4313</span>         <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">4314</span> 
+
+<span class="nn">~\AppData\Roaming\Python\Python37\site-packages\pandas\core\generic.py</span> in <span class="ni">drop</span><span class="nt">(self, labels, axis, index, columns, level, inplace, errors)</span>
+<span class="g g-Whitespace">   </span><span class="mi">4148</span>         <span class="k">for</span> <span class="n">axis</span><span class="p">,</span> <span class="n">labels</span> <span class="ow">in</span> <span class="n">axes</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<span class="g g-Whitespace">   </span><span class="mi">4149</span>             <span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">4150</span>                 <span class="n">obj</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">_drop_axis</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="n">errors</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">4151</span> 
+<span class="g g-Whitespace">   </span><span class="mi">4152</span>         <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+
+<span class="nn">~\AppData\Roaming\Python\Python37\site-packages\pandas\core\generic.py</span> in <span class="ni">_drop_axis</span><span class="nt">(self, labels, axis, level, errors)</span>
+<span class="g g-Whitespace">   </span><span class="mi">4183</span>                 <span class="n">new_axis</span> <span class="o">=</span> <span class="n">axis</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="n">errors</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">4184</span>             <span class="k">else</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">4185</span>                 <span class="n">new_axis</span> <span class="o">=</span> <span class="n">axis</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="n">errors</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">4186</span>             <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">axis_name</span><span class="p">:</span> <span class="n">new_axis</span><span class="p">})</span>
+<span class="g g-Whitespace">   </span><span class="mi">4187</span> 
+
+<span class="nn">~\AppData\Roaming\Python\Python37\site-packages\pandas\core\indexes\base.py</span> in <span class="ni">drop</span><span class="nt">(self, labels, errors)</span>
+<span class="g g-Whitespace">   </span><span class="mi">5589</span>         <span class="k">if</span> <span class="n">mask</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+<span class="g g-Whitespace">   </span><span class="mi">5590</span>             <span class="k">if</span> <span class="n">errors</span> <span class="o">!=</span> <span class="s2">&quot;ignore&quot;</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">5591</span>                 <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">labels</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="si">}</span><span class="s2"> not found in axis&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">5592</span>             <span class="n">indexer</span> <span class="o">=</span> <span class="n">indexer</span><span class="p">[</span><span class="o">~</span><span class="n">mask</span><span class="p">]</span>
+<span class="g g-Whitespace">   </span><span class="mi">5593</span>         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">indexer</span><span class="p">)</span>
+
+<span class="ne">KeyError</span>: &quot;[&#39;corp_oblig&#39;] not found in axis&quot;
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">fuzzymatcher</span></code> library reduces the O(n²) all-pairs comparison problem to a fast TF-IDF candidate lookup followed by exact scoring on a small candidate set. This makes it practical for datasets with thousands of records.</p>
+<p>The match score in the link table can be used to filter low-confidence links before downstream analysis.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks/ch11_probcon"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="01_probabilistic_concatenation.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Chapter 11 — Probabilistic Concatenation (ProbCon) via Fuzzy Matching</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../ch12_gan/gan_synthetic_data.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Chapter 12 — Generative Adversarial Networks for Tabular Data Synthesis</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#load-data">Load Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preview-both-datasets">Preview Both Datasets</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-matching-keys">Define Matching Keys</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-link-table">Generate Link Table</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fuzzy-left-join">Fuzzy Left Join</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#profile-report">Profile Report</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Angel Marchev & Vasil Marchev
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

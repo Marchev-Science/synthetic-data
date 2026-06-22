@@ -1,0 +1,1043 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Introduction to Synthetic Data Generation &#8212; Synthetic Data Generation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/00_overview/introduction';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Chapter 1.1 — Imputation by Category Mean" href="../01_imputation/01_missing_values_by_category.html" />
+    <link rel="prev" title="Synthetic Data Generation" href="../../intro.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Synthetic Data Generation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Introduction to Synthetic Data Generation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Supporting Techniques</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../01_imputation/01_missing_values_by_category.html">Chapter 1.1 — Imputation by Category Mean</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../01_imputation/02_missing_values_noisy_input.html">Chapter 1.2 — Distribution-Preserving Imputation via Noisy Sampling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02_oversampling/01_random_naive_oversampling.html">Chapter 2.1 — Random Naive Oversampling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02_oversampling/02_smote.html">Chapter 2.2 — SMOTE: Synthetic Minority Over-sampling Technique</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../03_monte_carlo/01_dice_distribution.html">Chapter 3.1 — Monte Carlo Simulation: Dice Probability Distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../03_monte_carlo/02_distribution_fitting.html">Chapter 3.2 — Monte Carlo Simulation with Distribution Fitting</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Algorithm Implementations</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../ch08_cholesky/cholesky_decomposition.html">Chapter 8 — Cholesky Decomposition for Correlated Data Synthesis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ch11_probcon/01_probabilistic_concatenation.html">Chapter 11 — Probabilistic Concatenation (ProbCon) via Fuzzy Matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ch11_probcon/02_data_link.html">Chapter 11 (Supplement) — Fuzzy Dataset Linking with <code class="docutils literal notranslate"><span class="pre">fuzzymatcher</span></code> with <code class="docutils literal notranslate"><span class="pre">fuzzymatcher</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ch12_gan/gan_synthetic_data.html">Chapter 12 — Generative Adversarial Networks for Tabular Data Synthesis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ch13_copula/cold_modeling_copula.html">Chapter 13 — Inverse Copula Sampling for Multivariate Data Synthesis</a></li>
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../reference/sklearn_synthesis_functions.html">scikit-learn Synthetic Dataset Generators</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/notebooks/00_overview/introduction.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Introduction to Synthetic Data Generation</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#decision-guide">1. Decision Guide</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-imputation">2. Data Imputation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#random-naive-oversampling">3. Random Naive Oversampling</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#smote">4. SMOTE</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#monte-carlo-simulation">5. Monte Carlo Simulation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distribution-fitting">6. Distribution Fitting</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cholesky-decomposition">7. Cholesky Decomposition</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gaussian-copula">8. Gaussian Copula</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gan">9. GAN</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#probcon">10. ProbCon</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="introduction-to-synthetic-data-generation">
+<h1>Introduction to Synthetic Data Generation<a class="headerlink" href="#introduction-to-synthetic-data-generation" title="Permalink to this heading">#</a></h1>
+<p>This notebook provides a hands-on tour of all synthesis and data preparation methods in this repository.</p>
+<p>Each section contains a minimal runnable code example. For the full treatment of each method, follow the link to the dedicated chapter notebook.</p>
+<p><strong>Authors:</strong> Angel Marchev, Vasil Marchev — UNWE Sofia</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.stats</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">stats</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<section id="decision-guide">
+<h2>1. Decision Guide<a class="headerlink" href="#decision-guide" title="Permalink to this heading">#</a></h2>
+<p>The decision framework for choosing the right synthesis approach is based on what data is available:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>What data is available?
+│
+├─ No data at all
+│    └─ Monte Carlo feature-wise + business logic filtering
+│
+├─ Marginal distributions + correlation matrix known
+│    └─ Cholesky decomposition  →  notebooks/ch08_cholesky/
+│
+├─ Multivariate joint distribution (copula) available
+│    └─ Inverse copula sampling  →  notebooks/ch13_copula/
+│
+├─ Partial real features + business rules
+│    └─ Feature derivation + filtering           (Ch. 9)
+│
+├─ Multiple partial datasets with overlapping keys
+│    └─ Probabilistic Concatenation / ProbCon  →  notebooks/ch11_probcon/
+│
+└─ Full real dataset (confidential / privacy-restricted)
+     └─ Generative Adversarial Network (GAN)  →  notebooks/ch12_gan/
+</pre></div>
+</div>
+<p>After generation, all methods pass through:</p>
+<ul class="simple">
+<li><p><strong>Horizontal synchronisation</strong> — cross-variable logical consistency checks</p></li>
+<li><p><strong>Vertical feature validation</strong> — distributional fidelity (KS test, HECA, LLM-PA)</p></li>
+</ul>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Available inputs</p></th>
+<th class="head"><p>Recommended method</p></th>
+<th class="head"><p>Chapter</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Only marginal distributions</p></td>
+<td><p>Monte Carlo simulation</p></td>
+<td><p>Ch. 3</p></td>
+</tr>
+<tr class="row-odd"><td><p>Distributions + correlation matrix</p></td>
+<td><p>Cholesky decomposition</p></td>
+<td><p>Ch. 8</p></td>
+</tr>
+<tr class="row-even"><td><p>Multivariate joint distribution</p></td>
+<td><p>Inverse copula sampling</p></td>
+<td><p>Ch. 13</p></td>
+</tr>
+<tr class="row-odd"><td><p>Partial real dataset + business rules</p></td>
+<td><p>Feature engineering + filtering</p></td>
+<td><p>Ch. 9</p></td>
+</tr>
+<tr class="row-even"><td><p>Multiple partial datasets with overlap</p></td>
+<td><p>ProbCon (fuzzy matching)</p></td>
+<td><p>Ch. 11</p></td>
+</tr>
+<tr class="row-odd"><td><p>Full real dataset (confidential)</p></td>
+<td><p>GAN</p></td>
+<td><p>Ch. 12</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="data-imputation">
+<h2>2. Data Imputation<a class="headerlink" href="#data-imputation" title="Permalink to this heading">#</a></h2>
+<p>Missing values must be handled before synthesis. Two strategies are common:</p>
+<p><strong>Mean by category</strong> — replace a missing value with the mean of that variable within its category group. Preserves within-group distributions without distorting group means.</p>
+<p><strong>Noisy input</strong> — replace with a random draw from the empirical distribution of the observed values for that variable. Preserves the overall marginal distribution (no shrinkage toward the mean).</p>
+<p><em>Full treatment: <a class="reference internal" href="../01_imputation/01_missing_values_by_category.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">01_missing_values_by_category</span></code></span></a>, <a class="reference internal" href="../01_imputation/02_missing_values_noisy_input.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">02_missing_values_noisy_input</span></code></span></a></em></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Strategy 1: fill missing values with the within-group mean</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">&#39;category&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;income&#39;</span><span class="p">:</span>   <span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="mi">85</span><span class="p">]</span>
+<span class="p">})</span>
+
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;income_filled&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">)[</span><span class="s1">&#39;income&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span>
+    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Strategy 2: fill with a random draw from the observed values (noisy input)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">fill_noisy</span><span class="p">(</span><span class="n">series</span><span class="p">):</span>
+    <span class="n">observed</span> <span class="o">=</span> <span class="n">series</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">missing_idx</span> <span class="o">=</span> <span class="n">series</span><span class="p">[</span><span class="n">series</span><span class="o">.</span><span class="n">isna</span><span class="p">()]</span><span class="o">.</span><span class="n">index</span>
+    <span class="n">series</span> <span class="o">=</span> <span class="n">series</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">series</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">missing_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">observed</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">missing_idx</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">series</span>
+
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;income_noisy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fill_noisy</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;income&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">[[</span><span class="s1">&#39;category&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">,</span> <span class="s1">&#39;income_noisy&#39;</span><span class="p">]])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="random-naive-oversampling">
+<h2>3. Random Naive Oversampling<a class="headerlink" href="#random-naive-oversampling" title="Permalink to this heading">#</a></h2>
+<p>When a dataset is class-imbalanced, models trained on it will be biased toward the majority class. The simplest remedy is <strong>random oversampling</strong>: draw samples from the minority class with replacement until the classes are balanced.</p>
+<p>This preserves the exact observed feature values — it introduces no new information, only replication. It works best when the minority class is well-characterised by the existing samples.</p>
+<p><em>Full treatment: <a class="reference internal" href="../02_oversampling/01_random_naive_oversampling.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">01_random_naive_oversampling</span></code></span></a></em></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Simulate an imbalanced dataset</span>
+<span class="n">majority</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">200</span><span class="p">),</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">200</span><span class="p">),</span> <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
+<span class="n">minority</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+<span class="n">df_imbalanced</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">majority</span><span class="p">,</span> <span class="n">minority</span><span class="p">],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Before:&quot;</span><span class="p">,</span> <span class="n">df_imbalanced</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span>
+
+<span class="n">n_majority</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_imbalanced</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="n">minority_upsampled</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">df_imbalanced</span><span class="p">[</span><span class="n">df_imbalanced</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n_majority</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">df_balanced</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">df_imbalanced</span><span class="p">[</span><span class="n">df_imbalanced</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">],</span> <span class="n">minority_upsampled</span><span class="p">],</span>
+    <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">frac</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;After: &quot;</span><span class="p">,</span> <span class="n">df_balanced</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="smote">
+<h2>4. SMOTE<a class="headerlink" href="#smote" title="Permalink to this heading">#</a></h2>
+<p><strong>Synthetic Minority Over-sampling TEchnique (SMOTE)</strong> creates <em>new</em> synthetic minority samples rather than replicating existing ones. For each minority sample <span class="math notranslate nohighlight">\(x_i\)</span>, it:</p>
+<ol class="arabic simple">
+<li><p>Finds its <span class="math notranslate nohighlight">\(k\)</span> nearest neighbours in the minority class</p></li>
+<li><p>Selects a random neighbour <span class="math notranslate nohighlight">\(x_j\)</span></p></li>
+<li><p>Creates a new sample at <span class="math notranslate nohighlight">\(x_i + \lambda (x_j - x_i)\)</span> where <span class="math notranslate nohighlight">\(\lambda \sim \text{Uniform}(0, 1)\)</span></p></li>
+</ol>
+<p>This interpolates between real minority samples, generating plausible new observations rather than exact duplicates.</p>
+<p><em>Full treatment: <a class="reference internal" href="../02_oversampling/02_smote.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">02_smote</span></code></span></a></em></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">imblearn.over_sampling</span><span class="w"> </span><span class="kn">import</span> <span class="n">SMOTE</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">df_imbalanced</span><span class="p">[[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df_imbalanced</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+<span class="n">smote</span> <span class="o">=</span> <span class="n">SMOTE</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">X_res</span><span class="p">,</span> <span class="n">y_res</span> <span class="o">=</span> <span class="n">smote</span><span class="o">.</span><span class="n">fit_resample</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Before SMOTE:&quot;</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">))))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;After SMOTE: &quot;</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y_res</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">))))</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span> <span class="p">[</span>
+    <span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;Original (imbalanced)&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="n">X_res</span><span class="p">,</span> <span class="n">y_res</span><span class="p">,</span> <span class="s1">&#39;After SMOTE&#39;</span><span class="p">)</span>
+<span class="p">]):</span>
+    <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">colour</span> <span class="ow">in</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;steelblue&#39;</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;orange&#39;</span><span class="p">)]:</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">labels</span> <span class="o">==</span> <span class="n">label</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">mask</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="n">mask</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">colour</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;class </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="monte-carlo-simulation">
+<h2>5. Monte Carlo Simulation<a class="headerlink" href="#monte-carlo-simulation" title="Permalink to this heading">#</a></h2>
+<p>Monte Carlo simulation generates synthetic observations by sampling from a known or fitted probability distribution many times. It is the method of choice when no real data exists — only domain knowledge about the marginal distributions of each feature.</p>
+<p>The classic demonstration is the dice roll: simulate many rolls to recover the theoretical probability distribution of the sum.</p>
+<p><em>Full treatment: <a class="reference internal" href="../03_monte_carlo/01_dice_distribution.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">notebooks/03_monte_carlo/01_dice_distribution.ipynb</span></code></span></a></em></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">n_trials</span> <span class="o">=</span> <span class="mi">50_000</span>
+<span class="n">n_dice</span><span class="p">,</span> <span class="n">n_sides</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">6</span>
+
+<span class="n">rolls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_sides</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_trials</span><span class="p">,</span> <span class="n">n_dice</span><span class="p">))</span>
+<span class="n">sums</span> <span class="o">=</span> <span class="n">rolls</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Empirical vs theoretical distribution</span>
+<span class="n">values</span><span class="p">,</span> <span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">sums</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">empirical_prob</span> <span class="o">=</span> <span class="n">counts</span> <span class="o">/</span> <span class="n">n_trials</span>
+
+<span class="c1"># Exact probability for 2d6</span>
+<span class="n">theoretical</span> <span class="o">=</span> <span class="p">{</span><span class="n">s</span><span class="p">:</span> <span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">s</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">13</span> <span class="o">-</span> <span class="n">s</span><span class="p">))</span> <span class="o">/</span> <span class="mi">36</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">13</span><span class="p">)}</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">values</span> <span class="o">-</span> <span class="mf">0.2</span><span class="p">,</span> <span class="n">empirical_prob</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Monte Carlo&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">values</span> <span class="o">+</span> <span class="mf">0.2</span><span class="p">,</span> <span class="p">[</span><span class="n">theoretical</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">values</span><span class="p">],</span> <span class="n">width</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Theoretical&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Sum of two dice&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Probability&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Monte Carlo (</span><span class="si">{</span><span class="n">n_trials</span><span class="si">:</span><span class="s1">,</span><span class="si">}</span><span class="s1"> trials) vs Exact distribution&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="distribution-fitting">
+<h2>6. Distribution Fitting<a class="headerlink" href="#distribution-fitting" title="Permalink to this heading">#</a></h2>
+<p>Before applying Cholesky or Monte Carlo synthesis to real variables, we need to identify which theoretical distribution best describes each feature. The <code class="docutils literal notranslate"><span class="pre">fitter</span></code> library fits all common distributions from <code class="docutils literal notranslate"><span class="pre">scipy.stats</span></code> and ranks them by goodness-of-fit.</p>
+<p><em>Full treatment: <a class="reference internal" href="../03_monte_carlo/02_distribution_fitting.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">notebooks/03_monte_carlo/02_distribution_fitting.ipynb</span></code></span></a></em></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fitter</span><span class="w"> </span><span class="kn">import</span> <span class="n">Fitter</span>
+
+<span class="c1"># Generate sample data with a known distribution (log-normal, typical for income)</span>
+<span class="n">sample_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">lognormal</span><span class="p">(</span><span class="n">mean</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">2000</span><span class="p">)</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="n">Fitter</span><span class="p">(</span><span class="n">sample_data</span><span class="p">,</span> <span class="n">distributions</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;norm&#39;</span><span class="p">,</span> <span class="s1">&#39;lognorm&#39;</span><span class="p">,</span> <span class="s1">&#39;gamma&#39;</span><span class="p">,</span> <span class="s1">&#39;expon&#39;</span><span class="p">,</span> <span class="s1">&#39;beta&#39;</span><span class="p">])</span>
+<span class="n">f</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Best fit:&quot;</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">get_best</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="cholesky-decomposition">
+<h2>7. Cholesky Decomposition<a class="headerlink" href="#cholesky-decomposition" title="Permalink to this heading">#</a></h2>
+<p><strong>When to use:</strong> marginal distributions and a correlation (or covariance) matrix are known or can be estimated from a sample.</p>
+<p>Cholesky decomposition factorises a positive-definite covariance matrix <span class="math notranslate nohighlight">\(\Sigma = L L^\top\)</span> where <span class="math notranslate nohighlight">\(L\)</span> is lower triangular. Multiplying independent standard normal samples <span class="math notranslate nohighlight">\(Z\)</span> by <span class="math notranslate nohighlight">\(L^\top\)</span> produces correlated samples with the target covariance:</p>
+<div class="math notranslate nohighlight">
+\[X = Z \cdot L^\top\]</div>
+<p>After generating correlated standard normal variables, apply the inverse CDF of each feature’s fitted marginal distribution to map to the correct scale.</p>
+<p><em>Full treatment: <a class="reference internal" href="../ch08_cholesky/cholesky_decomposition.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">notebooks/ch08_cholesky/cholesky_decomposition.ipynb</span></code></span></a></em></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">generate_correlated</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">cov</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate n samples from a multivariate distribution using Cholesky decomposition.&quot;&quot;&quot;</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cholesky</span><span class="p">(</span><span class="n">cov</span><span class="p">)</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">mean</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">mean</span> <span class="o">+</span> <span class="n">z</span> <span class="o">@</span> <span class="n">L</span><span class="o">.</span><span class="n">T</span>
+
+<span class="c1"># Two correlated financial variables: income and expenditure (correlation = 0.75)</span>
+<span class="n">mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">5000</span><span class="p">,</span> <span class="mi">3000</span><span class="p">])</span>
+<span class="n">cov</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">400_000</span><span class="p">,</span> <span class="mi">150_000</span><span class="p">],</span>
+                 <span class="p">[</span><span class="mi">150_000</span><span class="p">,</span>  <span class="mi">90_000</span><span class="p">]])</span>
+
+<span class="n">synth</span> <span class="o">=</span> <span class="n">generate_correlated</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">cov</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">2000</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Synthetic means:   </span><span class="si">{</span><span class="n">synth</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Target means:      </span><span class="si">{</span><span class="n">mean</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Synthetic corr:    </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">synth</span><span class="o">.</span><span class="n">T</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Target corr:       </span><span class="si">{</span><span class="n">cov</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">cov</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">cov</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">synth</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">synth</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Synthetic income&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Synthetic expenditure&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Cholesky-generated correlated variables (r = 0.75)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>For N variables, define the full correlation matrix, check it is positive definite, and apply the same factorisation. The full pipeline in <code class="docutils literal notranslate"><span class="pre">ch08_cholesky</span></code> also fits marginal distributions with <code class="docutils literal notranslate"><span class="pre">fitter</span></code> and validates output with the Kolmogorov–Smirnov test.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">is_positive_definite</span><span class="p">(</span><span class="n">matrix</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cholesky</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">except</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">LinAlgError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+<span class="c1"># 4-variable example</span>
+<span class="n">corr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+    <span class="p">[</span><span class="mf">1.00</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.50</span><span class="p">,</span> <span class="mf">0.30</span><span class="p">],</span>
+    <span class="p">[</span><span class="mf">0.75</span><span class="p">,</span> <span class="mf">1.00</span><span class="p">,</span> <span class="mf">0.40</span><span class="p">,</span> <span class="mf">0.20</span><span class="p">],</span>
+    <span class="p">[</span><span class="mf">0.50</span><span class="p">,</span> <span class="mf">0.40</span><span class="p">,</span> <span class="mf">1.00</span><span class="p">,</span> <span class="mf">0.60</span><span class="p">],</span>
+    <span class="p">[</span><span class="mf">0.30</span><span class="p">,</span> <span class="mf">0.20</span><span class="p">,</span> <span class="mf">0.60</span><span class="p">,</span> <span class="mf">1.00</span><span class="p">]</span>
+<span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Positive definite:&quot;</span><span class="p">,</span> <span class="n">is_positive_definite</span><span class="p">(</span><span class="n">corr</span><span class="p">))</span>
+
+<span class="n">L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cholesky</span><span class="p">(</span><span class="n">corr</span><span class="p">)</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">5000</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">X_synth</span> <span class="o">=</span> <span class="n">z</span> <span class="o">@</span> <span class="n">L</span><span class="o">.</span><span class="n">T</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Empirical correlation matrix:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">X_synth</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="gaussian-copula">
+<h2>8. Gaussian Copula<a class="headerlink" href="#gaussian-copula" title="Permalink to this heading">#</a></h2>
+<p><strong>When to use:</strong> the full multivariate joint distribution is available (or can be estimated), not just marginals + correlations.</p>
+<p>A Gaussian copula separates the dependence structure from the marginal distributions:</p>
+<ol class="arabic simple">
+<li><p>Transform each variable to a uniform marginal <span class="math notranslate nohighlight">\(U[0,1]\)</span> via its empirical CDF</p></li>
+<li><p>Apply the normal quantile function to get standard normal marginals</p></li>
+<li><p>Use Cholesky decomposition to introduce the target correlations</p></li>
+<li><p>Map back to each variable’s original scale via the inverse CDF</p></li>
+</ol>
+<p>This allows synthesising correlated data even when marginals are non-normal (e.g., categorical, skewed, bounded).</p>
+<p><em>Full treatment: <a class="reference internal" href="../ch13_copula/cold_modeling_copula.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">notebooks/ch13_copula/cold_modeling_copula.ipynb</span></code></span></a></em></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">scipy.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">norm</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">gaussian_copula</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">corr_matrix</span><span class="p">,</span> <span class="n">marginal_rvs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate samples from a Gaussian copula.</span>
+<span class="sd">    marginal_rvs: list of callables, each takes n and returns samples from one marginal.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">n_vars</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">marginal_rvs</span><span class="p">)</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cholesky</span><span class="p">(</span><span class="n">corr_matrix</span><span class="p">)</span>
+
+    <span class="c1"># Correlated standard normals</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">n_vars</span><span class="p">)</span> <span class="o">@</span> <span class="n">L</span><span class="o">.</span><span class="n">T</span>
+
+    <span class="c1"># Map to uniform via the normal CDF</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+
+    <span class="c1"># Map each uniform margin to the target marginal via inverse CDF (percent-point function)</span>
+    <span class="n">samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">rv</span><span class="p">(</span><span class="n">u</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">rv</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">marginal_rvs</span><span class="p">)])</span>
+    <span class="k">return</span> <span class="n">samples</span>
+
+
+<span class="c1"># Example: two correlated variables with different marginals</span>
+<span class="c1"># Variable 1: log-normal (income-like), Variable 2: normal (expenditure-like)</span>
+<span class="n">corr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.65</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.65</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]])</span>
+
+<span class="n">marginals</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="k">lambda</span> <span class="n">u</span><span class="p">:</span> <span class="n">stats</span><span class="o">.</span><span class="n">lognorm</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">10</span><span class="p">)),</span>  <span class="c1"># log-normal</span>
+    <span class="k">lambda</span> <span class="n">u</span><span class="p">:</span> <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="mi">3000</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">300</span><span class="p">),</span>          <span class="c1"># normal</span>
+<span class="p">]</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">gaussian_copula</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">3000</span><span class="p">,</span> <span class="n">corr_matrix</span><span class="o">=</span><span class="n">corr</span><span class="p">,</span> <span class="n">marginal_rvs</span><span class="o">=</span><span class="n">marginals</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Empirical correlation: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">T</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">  (target: 0.65)&quot;</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Log-normal variable&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Normal variable&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Joint distribution (Gaussian copula)&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Marginal: log-normal&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="gan">
+<h2>9. GAN<a class="headerlink" href="#gan" title="Permalink to this heading">#</a></h2>
+<p><strong>When to use:</strong> a real confidential or privacy-restricted dataset exists and we want a synthetic surrogate that closely replicates its full statistical structure without exposing individual records.</p>
+<p>A Generative Adversarial Network trains two competing networks:</p>
+<ul class="simple">
+<li><p><strong>Generator</strong> <span class="math notranslate nohighlight">\(G\)</span>: maps random noise <span class="math notranslate nohighlight">\(z\)</span> to synthetic samples</p></li>
+<li><p><strong>Discriminator</strong> <span class="math notranslate nohighlight">\(D\)</span>: distinguishes real from synthetic samples</p></li>
+</ul>
+<p>Training alternates: <span class="math notranslate nohighlight">\(D\)</span> learns to detect fakes; <span class="math notranslate nohighlight">\(G\)</span> learns to fool <span class="math notranslate nohighlight">\(D\)</span>. At convergence, <span class="math notranslate nohighlight">\(G(z)\)</span> produces samples statistically indistinguishable from the real data.</p>
+<p>Pre-trained models are stored in <code class="docutils literal notranslate"><span class="pre">models/</span></code>. Validation uses cosine similarity of mean feature vectors and k-means cluster analysis.</p>
+<p><em>Full treatment: <a class="reference internal" href="../ch12_gan/gan_synthetic_data.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">notebooks/ch12_gan/gan_synthetic_data.ipynb</span></code></span></a></em></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">tensorflow</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tf</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">build_generator</span><span class="p">(</span><span class="n">noise_dim</span><span class="p">,</span> <span class="n">output_dim</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Sequential</span><span class="p">([</span>
+        <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="n">noise_dim</span><span class="p">,)),</span>
+        <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">),</span>
+        <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">output_dim</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">)</span>
+    <span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;generator&#39;</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">build_discriminator</span><span class="p">(</span><span class="n">input_dim</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Sequential</span><span class="p">([</span>
+        <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="n">input_dim</span><span class="p">,)),</span>
+        <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">),</span>
+        <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;sigmoid&#39;</span><span class="p">)</span>
+    <span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;discriminator&#39;</span><span class="p">)</span>
+
+<span class="n">NOISE_DIM</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">N_FEATURES</span> <span class="o">=</span> <span class="mi">48</span>  <span class="c1"># Bulgarian financial/demographic survey dataset</span>
+
+<span class="n">generator</span>     <span class="o">=</span> <span class="n">build_generator</span><span class="p">(</span><span class="n">NOISE_DIM</span><span class="p">,</span> <span class="n">N_FEATURES</span><span class="p">)</span>
+<span class="n">discriminator</span> <span class="o">=</span> <span class="n">build_discriminator</span><span class="p">(</span><span class="n">N_FEATURES</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">generator</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+
+<span class="c1"># To generate from a pre-trained model:</span>
+<span class="c1"># generator = tf.keras.models.load_model(&#39;../../models/generator.tf&#39;)</span>
+<span class="c1"># noise = tf.random.normal([1000, NOISE_DIM])</span>
+<span class="c1"># synthetic = generator(noise, training=False).numpy()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The training loop applies:</p>
+<ul class="simple">
+<li><p><strong>Discriminator loss:</strong> binary cross-entropy — real samples labelled 1, synthetic labelled 0</p></li>
+<li><p><strong>Generator loss:</strong> binary cross-entropy — synthetic samples labelled 1 (fool the discriminator)</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cross_entropy</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">losses</span><span class="o">.</span><span class="n">BinaryCrossentropy</span><span class="p">()</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">discriminator_loss</span><span class="p">(</span><span class="n">real_output</span><span class="p">,</span> <span class="n">fake_output</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">cross_entropy</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">real_output</span><span class="p">),</span> <span class="n">real_output</span><span class="p">)</span> <span class="o">+</span> \
+           <span class="n">cross_entropy</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">fake_output</span><span class="p">),</span> <span class="n">fake_output</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">generator_loss</span><span class="p">(</span><span class="n">fake_output</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">cross_entropy</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">fake_output</span><span class="p">),</span> <span class="n">fake_output</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>See the full GAN notebook for the complete training loop, early stopping, and validation with the KS test.</p>
+</section>
+<hr class="docutils" />
+<section id="probcon">
+<h2>10. ProbCon<a class="headerlink" href="#probcon" title="Permalink to this heading">#</a></h2>
+<p><strong>When to use:</strong> multiple partial datasets from different sources contain overlapping key variables (e.g., name + city) but values are not identical across sources due to spelling variation, abbreviation, or data entry errors.</p>
+<p><strong>Probabilistic Concatenation (ProbCon)</strong> merges these datasets by:</p>
+<ol class="arabic simple">
+<li><p>Tokenising key fields and building a TF-IDF candidate index (SQLite)</p></li>
+<li><p>Computing match probabilities between candidate pairs (Levenshtein distance + TF-IDF score)</p></li>
+<li><p>Resolving ambiguous matches stochastically by sampling from the probability distribution of candidates</p></li>
+</ol>
+<p>The result is a probabilistically joined dataset — each record in the left table is matched to the most probable record in the right table, with match confidence scores for validation.</p>
+<p><em>Full treatment: <a class="reference internal" href="../ch11_probcon/01_probabilistic_concatenation.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">notebooks/ch11_probcon/01_probabilistic_concatenation.ipynb</span></code></span></a></em></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;../../&#39;</span><span class="p">)</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">fuzzymatcher</span>
+
+<span class="c1"># Survey dataset 1: name + city + income</span>
+<span class="n">df_survey</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">&#39;id_survey&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+    <span class="s1">&#39;name_survey&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Ivan Petrov&#39;</span><span class="p">,</span> <span class="s1">&#39;Maria Georgieva&#39;</span><span class="p">,</span> <span class="s1">&#39;Georgi Ivanov&#39;</span><span class="p">,</span> <span class="s1">&#39;Elena Dimitrova&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;income&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2500</span><span class="p">,</span> <span class="mi">3100</span><span class="p">,</span> <span class="mi">1800</span><span class="p">,</span> <span class="mi">4200</span><span class="p">]</span>
+<span class="p">})</span>
+
+<span class="c1"># Registry dataset: same people, different source (slight name variation)</span>
+<span class="n">df_registry</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">&#39;id_registry&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;name_registry&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;I. Petrov&#39;</span><span class="p">,</span> <span class="s1">&#39;M. Georgieva&#39;</span><span class="p">,</span> <span class="s1">&#39;G. Ivanov&#39;</span><span class="p">,</span> <span class="s1">&#39;E. Dimitrova&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;education&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;MSc&#39;</span><span class="p">,</span> <span class="s1">&#39;BSc&#39;</span><span class="p">,</span> <span class="s1">&#39;PhD&#39;</span><span class="p">,</span> <span class="s1">&#39;MSc&#39;</span><span class="p">]</span>
+<span class="p">})</span>
+
+<span class="c1"># Fuzzy left join on the name columns</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">fuzzymatcher</span><span class="o">.</span><span class="n">fuzzy_left_join</span><span class="p">(</span>
+    <span class="n">df_survey</span><span class="p">,</span> <span class="n">df_registry</span><span class="p">,</span>
+    <span class="n">left_on</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;name_survey&#39;</span><span class="p">],</span>
+    <span class="n">right_on</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;name_registry&#39;</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">[[</span><span class="s1">&#39;name_survey&#39;</span><span class="p">,</span> <span class="s1">&#39;name_registry&#39;</span><span class="p">,</span> <span class="s1">&#39;best_match_score&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">]])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>Key library</p></th>
+<th class="head"><p>Typical output size</p></th>
+<th class="head"><p>Chapter</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Imputation (mean by category)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pandas</span></code></p></td>
+<td><p>— (in-place)</p></td>
+<td><p>Ch. 2.2</p></td>
+</tr>
+<tr class="row-odd"><td><p>Imputation (noisy input)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">numpy</span></code></p></td>
+<td><p>— (in-place)</p></td>
+<td><p>Ch. 2.2</p></td>
+</tr>
+<tr class="row-even"><td><p>Random naive oversampling</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pandas</span></code></p></td>
+<td><p>up to 2× minority</p></td>
+<td><p>Ch. 3.3</p></td>
+</tr>
+<tr class="row-odd"><td><p>SMOTE</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">imbalanced-learn</span></code></p></td>
+<td><p>up to 2× minority</p></td>
+<td><p>Ch. 3.3</p></td>
+</tr>
+<tr class="row-even"><td><p>Monte Carlo</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">numpy</span></code></p></td>
+<td><p>unlimited</p></td>
+<td><p>Ch. 6.3.3</p></td>
+</tr>
+<tr class="row-odd"><td><p>Cholesky decomposition</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">numpy</span></code>, <code class="docutils literal notranslate"><span class="pre">scipy</span></code></p></td>
+<td><p>unlimited</p></td>
+<td><p>Ch. 8</p></td>
+</tr>
+<tr class="row-even"><td><p>Gaussian copula</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">scipy</span></code>, <code class="docutils literal notranslate"><span class="pre">numpy</span></code></p></td>
+<td><p>unlimited</p></td>
+<td><p>Ch. 13</p></td>
+</tr>
+<tr class="row-odd"><td><p>GAN</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tensorflow</span></code></p></td>
+<td><p>unlimited</p></td>
+<td><p>Ch. 12</p></td>
+</tr>
+<tr class="row-even"><td><p>ProbCon</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">fuzzymatcher</span></code></p></td>
+<td><p>≤ left table size</p></td>
+<td><p>Ch. 11</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Each chapter notebook includes full pipelines, validation (KS test, cluster analysis, cosine similarity), and Bulgarian financial/demographic survey data where applicable.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks/00_overview"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../../intro.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Synthetic Data Generation</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../01_imputation/01_missing_values_by_category.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Chapter 1.1 — Imputation by Category Mean</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#decision-guide">1. Decision Guide</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-imputation">2. Data Imputation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#random-naive-oversampling">3. Random Naive Oversampling</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#smote">4. SMOTE</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#monte-carlo-simulation">5. Monte Carlo Simulation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distribution-fitting">6. Distribution Fitting</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cholesky-decomposition">7. Cholesky Decomposition</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gaussian-copula">8. Gaussian Copula</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gan">9. GAN</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#probcon">10. ProbCon</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Angel Marchev & Vasil Marchev
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

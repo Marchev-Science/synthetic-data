@@ -1,0 +1,740 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Chapter 3.2 — Monte Carlo Simulation with Distribution Fitting &#8212; Synthetic Data Generation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/03_monte_carlo/02_distribution_fitting';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Chapter 8 — Cholesky Decomposition for Correlated Data Synthesis" href="../ch08_cholesky/cholesky_decomposition.html" />
+    <link rel="prev" title="Chapter 3.1 — Monte Carlo Simulation: Dice Probability Distribution" href="01_dice_distribution.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Synthetic Data Generation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../00_overview/introduction.html">Introduction to Synthetic Data Generation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Supporting Techniques</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../01_imputation/01_missing_values_by_category.html">Chapter 1.1 — Imputation by Category Mean</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../01_imputation/02_missing_values_noisy_input.html">Chapter 1.2 — Distribution-Preserving Imputation via Noisy Sampling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02_oversampling/01_random_naive_oversampling.html">Chapter 2.1 — Random Naive Oversampling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02_oversampling/02_smote.html">Chapter 2.2 — SMOTE: Synthetic Minority Over-sampling Technique</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01_dice_distribution.html">Chapter 3.1 — Monte Carlo Simulation: Dice Probability Distribution</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Chapter 3.2 — Monte Carlo Simulation with Distribution Fitting</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Algorithm Implementations</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../ch08_cholesky/cholesky_decomposition.html">Chapter 8 — Cholesky Decomposition for Correlated Data Synthesis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ch11_probcon/01_probabilistic_concatenation.html">Chapter 11 — Probabilistic Concatenation (ProbCon) via Fuzzy Matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ch11_probcon/02_data_link.html">Chapter 11 (Supplement) — Fuzzy Dataset Linking with <code class="docutils literal notranslate"><span class="pre">fuzzymatcher</span></code> with <code class="docutils literal notranslate"><span class="pre">fuzzymatcher</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ch12_gan/gan_synthetic_data.html">Chapter 12 — Generative Adversarial Networks for Tabular Data Synthesis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ch13_copula/cold_modeling_copula.html">Chapter 13 — Inverse Copula Sampling for Multivariate Data Synthesis</a></li>
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../reference/sklearn_synthesis_functions.html">scikit-learn Synthetic Dataset Generators</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/notebooks/03_monte_carlo/02_distribution_fitting.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Chapter 3.2 — Monte Carlo Simulation with Distribution Fitting</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup-define-input-distributions">Setup — Define Input Distributions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#monte-carlo-simulation-run-n-iterations">Monte Carlo Simulation — Run N Iterations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analyse-results">Analyse Results</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualise-the-output-distribution">Visualise the Output Distribution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distribution-fitting-with-fitter">Distribution Fitting with <code class="docutils literal notranslate"><span class="pre">fitter</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="chapter-3-2-monte-carlo-simulation-with-distribution-fitting">
+<h1>Chapter 3.2 — Monte Carlo Simulation with Distribution Fitting<a class="headerlink" href="#chapter-3-2-monte-carlo-simulation-with-distribution-fitting" title="Permalink to this heading">#</a></h1>
+<p>This notebook demonstrates the full Monte Carlo workflow:</p>
+<ol class="arabic simple">
+<li><p>Define input variables with known probability distributions.</p></li>
+<li><p>Sample from those distributions many times.</p></li>
+<li><p>Compute the output quantity for each sample.</p></li>
+<li><p>Use the accumulated results to estimate the output distribution.</p></li>
+<li><p>Fit a named statistical distribution to the output using the <code class="docutils literal notranslate"><span class="pre">fitter</span></code> library.</p></li>
+</ol>
+<p><strong>When to use this approach:</strong></p>
+<ul class="simple">
+<li><p>Individual variable distributions are known or can be estimated from data.</p></li>
+<li><p>The output quantity is a deterministic function of the inputs.</p></li>
+<li><p>You need both the expected value <em>and</em> the uncertainty of the output.</p></li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">fitter</span></code> library wraps scipy.stats and tests dozens of distributions simultaneously, ranking them by goodness of fit (sum-of-squared-error or KS statistic).</p>
+<section id="setup-define-input-distributions">
+<h2>Setup — Define Input Distributions<a class="headerlink" href="#setup-define-input-distributions" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="ch">#!pip install fitter</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">fitter</span><span class="w"> </span><span class="kn">import</span> <span class="n">Fitter</span><span class="p">,</span> <span class="n">get_common_distributions</span><span class="p">,</span> <span class="n">get_distributions</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="monte-carlo-simulation-run-n-iterations">
+<h2>Monte Carlo Simulation — Run N Iterations<a class="headerlink" href="#monte-carlo-simulation-run-n-iterations" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the inputs and their probability distributions</span>
+<span class="n">inputs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;input_1&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;mean&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;std_dev&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+          <span class="s2">&quot;input_2&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;mean&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> <span class="s2">&quot;std_dev&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Number of iterations</span>
+<span class="n">num_iterations</span> <span class="o">=</span> <span class="mi">1000</span>
+
+<span class="c1"># Storage for simulation results</span>
+<span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="analyse-results">
+<h2>Analyse Results<a class="headerlink" href="#analyse-results" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run the simulation</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_iterations</span><span class="p">):</span>
+    <span class="c1"># Generate random values for each input based on its distribution</span>
+    <span class="n">input_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;input_1&quot;</span><span class="p">][</span><span class="s2">&quot;mean&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;input_1&quot;</span><span class="p">][</span><span class="s2">&quot;std_dev&quot;</span><span class="p">])</span>
+    <span class="n">input_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;input_2&quot;</span><span class="p">][</span><span class="s2">&quot;mean&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;input_2&quot;</span><span class="p">][</span><span class="s2">&quot;std_dev&quot;</span><span class="p">])</span>
+
+    <span class="c1"># Calculate the output of the model</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">input_1</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span><span class="n">input_1</span><span class="o">*</span><span class="n">input_2</span><span class="o">+</span> <span class="n">input_2</span><span class="o">**</span><span class="mi">2</span>
+
+    <span class="c1"># Store the result</span>
+    <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="visualise-the-output-distribution">
+<h2>Visualise the Output Distribution<a class="headerlink" href="#visualise-the-output-distribution" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Analyze the results</span>
+<span class="n">mean_result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+<span class="n">std_dev_result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="distribution-fitting-with-fitter">
+<h2>Distribution Fitting with <code class="docutils literal notranslate"><span class="pre">fitter</span></code><a class="headerlink" href="#distribution-fitting-with-fitter" title="Permalink to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">fitter</span></code> library tests all scipy.stats distributions and ranks them by fit quality. We first run on all available distributions, then restrict to common ones for speed.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Visualize the results</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="s2">&quot;paper&quot;</span><span class="p">,</span> <span class="n">font_scale</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">displot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">results</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">results</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;hist&quot;</span><span class="p">,</span> <span class="n">bins</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">aspect</span> <span class="o">=</span> <span class="mf">1.5</span><span class="p">)</span>
+
+<span class="c1"># Print the results</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Mean result: &quot;</span><span class="p">,</span> <span class="n">mean_result</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Standard deviation of result: &quot;</span><span class="p">,</span> <span class="n">std_dev_result</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Mean result:  717.2310656965162
+Standard deviation of result:  170.11285061019177
+</pre></div>
+</div>
+<img alt="../../_images/dafc93fc85495a14085481351b4acd2a8a959c7f7c7a5af5a6d75ffc92579842.png" src="../../_images/dafc93fc85495a14085481351b4acd2a8a959c7f7c7a5af5a6d75ffc92579842.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">Fitter</span><span class="p">(</span><span class="n">results</span><span class="p">,</span><span class="n">distributions</span><span class="o">=</span><span class="n">get_distributions</span><span class="p">(),</span><span class="n">timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span><span class="n">bins</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span><span class="c1">#,xmin=0.1, xmax=1 ) </span>
+<span class="c1">#get_common_distributions() ##[&#39;gamma&#39;,&#39;lognorm&#39;,&quot;beta&quot;,&quot;burr&quot;,&quot;norm&quot;]</span>
+<span class="n">f</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+
+<span class="n">f</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Fitting 109 distributions:   0%|                        | 0/109 [00:00&lt;?, ?it/s]SKIPPED _fit distribution (taking more than 60 seconds)
+Fitting 109 distributions:  26%|███▊           | 28/109 [00:04&lt;00:32,  2.50it/s]/home/junior/anaconda3/lib/python3.9/site-packages/scipy/stats/_continuous_distns.py:3405: IntegrationWarning: The algorithm does not converge.  Roundoff error is detected
+  in the extrapolation table.  It is assumed that the requested tolerance
+  cannot be achieved, and that the returned result (if full_output = 1) is 
+  the best which can be obtained.
+  t1 = integrate.quad(llc, -np.inf, x)[0]
+Fitting 109 distributions:  45%|██████▋        | 49/109 [00:07&lt;00:08,  6.78it/s]SKIPPED kstwo distribution (taking more than 60 seconds)
+Fitting 109 distributions:  62%|█████████▎     | 68/109 [01:04&lt;02:36,  3.82s/it]SKIPPED kappa4 distribution (taking more than 60 seconds)
+Fitting 109 distributions:  63%|█████████▍     | 69/109 [01:07&lt;02:19,  3.50s/it]SKIPPED levy_stable distribution (taking more than 60 seconds)
+Fitting 109 distributions:  72%|██████████▋    | 78/109 [01:46&lt;02:47,  5.39s/it]SKIPPED ncf distribution (taking more than 60 seconds)
+Fitting 109 distributions:  72%|██████████▊    | 79/109 [01:56&lt;03:24,  6.82s/it]SKIPPED nct distribution (taking more than 60 seconds)
+Fitting 109 distributions:  73%|███████████    | 80/109 [02:04&lt;03:24,  7.05s/it]SKIPPED ncx2 distribution (taking more than 60 seconds)
+Fitting 109 distributions:  74%|███████████▏   | 81/109 [02:05&lt;02:26,  5.25s/it]SKIPPED rv_continuous distribution (taking more than 60 seconds)
+SKIPPED rv_histogram distribution (taking more than 60 seconds)
+SKIPPED norminvgauss distribution (taking more than 60 seconds)
+Fitting 109 distributions:  77%|███████████▌   | 84/109 [02:07&lt;01:08,  2.72s/it]SKIPPED pearson3 distribution (taking more than 60 seconds)
+Fitting 109 distributions:  78%|███████████▋   | 85/109 [02:08&lt;00:58,  2.44s/it]SKIPPED powerlognorm distribution (taking more than 60 seconds)
+Fitting 109 distributions:  81%|████████████   | 88/109 [02:25&lt;01:25,  4.07s/it]/home/junior/anaconda3/lib/python3.9/site-packages/scipy/integrate/_quadpack_py.py:1151: IntegrationWarning: The maximum number of subdivisions (50) has been achieved.
+  If increasing the limit yields no improvement it is advised to analyze 
+  the integrand in order to determine the difficulties.  If the position of a 
+  local difficulty can be determined (singularity, discontinuity) one will 
+  probably gain from splitting up the interval and calling the integrator 
+  on the subranges.  Perhaps a special-purpose integrator should be used.
+  quad_r = quad(f, low, high, args=args, full_output=self.full_output,
+Fitting 109 distributions:  83%|████████████▌  | 91/109 [02:45&lt;01:35,  5.28s/it]SKIPPED recipinvgauss distribution (taking more than 60 seconds)
+Fitting 109 distributions:  84%|████████████▋  | 92/109 [02:47&lt;01:11,  4.23s/it]/home/junior/anaconda3/lib/python3.9/site-packages/scipy/integrate/_quadpack_py.py:1151: IntegrationWarning: The integral is probably divergent, or slowly convergent.
+  quad_r = quad(f, low, high, args=args, full_output=self.full_output,
+Fitting 109 distributions:  89%|█████████████▎ | 97/109 [03:07&lt;00:48,  4.06s/it]SKIPPED studentized_range distribution (taking more than 60 seconds)
+Fitting 109 distributions:  91%|█████████████▌ | 99/109 [03:14&lt;00:35,  3.55s/it]SKIPPED t distribution (taking more than 60 seconds)
+Fitting 109 distributions:  94%|█████████████▏| 103/109 [03:42&lt;00:36,  6.07s/it]SKIPPED triang distribution (taking more than 60 seconds)
+Fitting 109 distributions:  95%|█████████████▎| 104/109 [03:43&lt;00:23,  4.68s/it]SKIPPED truncweibull_min distribution (taking more than 60 seconds)
+Fitting 109 distributions:  97%|█████████████▌| 106/109 [03:58&lt;00:18,  6.15s/it]SKIPPED vonmises distribution (taking more than 60 seconds)
+Fitting 109 distributions:  98%|█████████████▋| 107/109 [04:02&lt;00:10,  5.39s/it]SKIPPED vonmises_line distribution (taking more than 60 seconds)
+Fitting 109 distributions:  99%|█████████████▊| 108/109 [04:07&lt;00:05,  5.32s/it]SKIPPED weibull_max distribution (taking more than 60 seconds)
+Fitting 109 distributions: 100%|██████████████| 109/109 [04:14&lt;00:00,  2.34s/it]
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>sumsquare_error</th>
+      <th>aic</th>
+      <th>bic</th>
+      <th>kl_div</th>
+      <th>ks_statistic</th>
+      <th>ks_pvalue</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>skewnorm</th>
+      <td>8.260124e-07</td>
+      <td>861.272949</td>
+      <td>-20893.688009</td>
+      <td>inf</td>
+      <td>0.012299</td>
+      <td>9.977471e-01</td>
+    </tr>
+    <tr>
+      <th>fatiguelife</th>
+      <td>8.277218e-07</td>
+      <td>863.573472</td>
+      <td>-20891.620731</td>
+      <td>inf</td>
+      <td>0.012033</td>
+      <td>9.983797e-01</td>
+    </tr>
+    <tr>
+      <th>invgamma</th>
+      <td>8.287930e-07</td>
+      <td>856.557918</td>
+      <td>-20890.327385</td>
+      <td>inf</td>
+      <td>0.012179</td>
+      <td>9.980529e-01</td>
+    </tr>
+    <tr>
+      <th>genhyperbolic</th>
+      <td>8.305788e-07</td>
+      <td>857.387016</td>
+      <td>-20874.359583</td>
+      <td>inf</td>
+      <td>0.122731</td>
+      <td>1.382110e-13</td>
+    </tr>
+    <tr>
+      <th>alpha</th>
+      <td>8.306096e-07</td>
+      <td>855.218029</td>
+      <td>-20888.137940</td>
+      <td>inf</td>
+      <td>0.016867</td>
+      <td>9.338545e-01</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">best_m</span><span class="o">=</span><span class="n">f</span><span class="o">.</span><span class="n">get_best</span><span class="p">(</span><span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;sumsquare_error&#39;</span><span class="p">)</span>
+<span class="n">best_m</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;powernorm&#39;: {&#39;c&#39;: 0.17991120337774258,
+  &#39;loc&#39;: 514.1173194334983,
+  &#39;scale&#39;: 93.54968282371107}}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this heading">#</a></h2>
+<p>The Monte Carlo approach converts knowledge about <em>input</em> distributions into an estimate of the <em>output</em> distribution. The <code class="docutils literal notranslate"><span class="pre">fitter</span></code> library then identifies which named distribution best describes the output — this distribution can be used in subsequent simulations or reported alongside confidence intervals.</p>
+<p><strong>Next:</strong> Chapter 4 (Cholesky Decomposition) extends this to multi-variable synthesis where inter-variable correlations must also be preserved.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks/03_monte_carlo"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="01_dice_distribution.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Chapter 3.1 — Monte Carlo Simulation: Dice Probability Distribution</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../ch08_cholesky/cholesky_decomposition.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Chapter 8 — Cholesky Decomposition for Correlated Data Synthesis</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup-define-input-distributions">Setup — Define Input Distributions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#monte-carlo-simulation-run-n-iterations">Monte Carlo Simulation — Run N Iterations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analyse-results">Analyse Results</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualise-the-output-distribution">Visualise the Output Distribution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distribution-fitting-with-fitter">Distribution Fitting with <code class="docutils literal notranslate"><span class="pre">fitter</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Angel Marchev & Vasil Marchev
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

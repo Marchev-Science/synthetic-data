@@ -1,0 +1,700 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Chapter 11 — Probabilistic Concatenation (ProbCon) via Fuzzy Matching &#8212; Synthetic Data Generation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/ch11_probcon/01_probabilistic_concatenation';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Chapter 11 (Supplement) — Fuzzy Dataset Linking with fuzzymatcher with fuzzymatcher" href="02_data_link.html" />
+    <link rel="prev" title="Chapter 8 — Cholesky Decomposition for Correlated Data Synthesis" href="../ch08_cholesky/cholesky_decomposition.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Synthetic Data Generation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../00_overview/introduction.html">Introduction to Synthetic Data Generation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Supporting Techniques</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../01_imputation/01_missing_values_by_category.html">Chapter 1.1 — Imputation by Category Mean</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../01_imputation/02_missing_values_noisy_input.html">Chapter 1.2 — Distribution-Preserving Imputation via Noisy Sampling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02_oversampling/01_random_naive_oversampling.html">Chapter 2.1 — Random Naive Oversampling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02_oversampling/02_smote.html">Chapter 2.2 — SMOTE: Synthetic Minority Over-sampling Technique</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../03_monte_carlo/01_dice_distribution.html">Chapter 3.1 — Monte Carlo Simulation: Dice Probability Distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../03_monte_carlo/02_distribution_fitting.html">Chapter 3.2 — Monte Carlo Simulation with Distribution Fitting</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Algorithm Implementations</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../ch08_cholesky/cholesky_decomposition.html">Chapter 8 — Cholesky Decomposition for Correlated Data Synthesis</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Chapter 11 — Probabilistic Concatenation (ProbCon) via Fuzzy Matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_data_link.html">Chapter 11 (Supplement) — Fuzzy Dataset Linking with <code class="docutils literal notranslate"><span class="pre">fuzzymatcher</span></code> with <code class="docutils literal notranslate"><span class="pre">fuzzymatcher</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ch12_gan/gan_synthetic_data.html">Chapter 12 — Generative Adversarial Networks for Tabular Data Synthesis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ch13_copula/cold_modeling_copula.html">Chapter 13 — Inverse Copula Sampling for Multivariate Data Synthesis</a></li>
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../reference/sklearn_synthesis_functions.html">scikit-learn Synthetic Dataset Generators</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/notebooks/ch11_probcon/01_probabilistic_concatenation.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Chapter 11 — Probabilistic Concatenation (ProbCon) via Fuzzy Matching</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#utility-functions">Utility Functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#probabilistic-concatenation-function">Probabilistic Concatenation Function</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#helper-binary-encoding-of-numeric-columns">Helper: Binary Encoding of Numeric Columns</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-two-synthetic-partial-datasets">Generate Two Synthetic Partial Datasets</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-probabilistic-concatenation">Run Probabilistic Concatenation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#build-the-merged-dataset">Build the Merged Dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="chapter-11-probabilistic-concatenation-probcon-via-fuzzy-matching">
+<h1>Chapter 11 — Probabilistic Concatenation (ProbCon) via Fuzzy Matching<a class="headerlink" href="#chapter-11-probabilistic-concatenation-probcon-via-fuzzy-matching" title="Permalink to this heading">#</a></h1>
+<p>When building a synthetic dataset from <strong>multiple partial sources</strong>, each source may contain different variables but share a few overlapping key fields (e.g., age, sex). Exact matching fails because the key values may differ slightly across sources (different codings, rounding, or measurement error).</p>
+<p>This notebook implements <strong>probabilistic concatenation</strong>:</p>
+<ol class="arabic simple">
+<li><p>Compute the Levenshtein (edit) distance between key fields in two datasets.</p></li>
+<li><p>Convert distances to match probabilities.</p></li>
+<li><p>Randomly select a match from the candidates weighted by probability — resolving ties and ambiguous cases stochastically.</p></li>
+</ol>
+<p><strong>When to use this approach:</strong></p>
+<ul class="simple">
+<li><p>Partial datasets from different sources share at least two overlapping variables.</p></li>
+<li><p>Key values are not identical across sources (fuzzy overlap rather than exact join).</p></li>
+<li><p>A deterministic best-match rule would produce systematic bias; random selection among near-equal candidates is preferable.</p></li>
+</ul>
+<blockquote>
+<div><p><strong>See also:</strong> Chapter 7.2 uses the <code class="docutils literal notranslate"><span class="pre">fuzzymatcher</span></code> library, which adds a SQLite-backed TF-IDF candidate index for faster matching on larger datasets.</p>
+</div></blockquote>
+<section id="utility-functions">
+<h2>Utility Functions<a class="headerlink" href="#utility-functions" title="Permalink to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">levenshtein_distance</span></code> function computes the minimum edit distance between two strings. <code class="docutils literal notranslate"><span class="pre">calculate_probability</span></code> converts that distance to a match probability (higher distance → lower probability).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">levenshtein_distance</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the Levenshtein distance between two strings.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">s1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">s2</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">levenshtein_distance</span><span class="p">(</span><span class="n">s2</span><span class="p">,</span> <span class="n">s1</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">s2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">s1</span><span class="p">)</span>
+
+    <span class="n">previous_row</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c1</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">s1</span><span class="p">):</span>
+        <span class="n">current_row</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">c2</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">s2</span><span class="p">):</span>
+            <span class="n">insertions</span> <span class="o">=</span> <span class="n">previous_row</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">deletions</span> <span class="o">=</span> <span class="n">current_row</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">substitutions</span> <span class="o">=</span> <span class="n">previous_row</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">c1</span> <span class="o">!=</span> <span class="n">c2</span><span class="p">)</span>
+            <span class="n">current_row</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">insertions</span><span class="p">,</span> <span class="n">deletions</span><span class="p">,</span> <span class="n">substitutions</span><span class="p">))</span>
+        <span class="n">previous_row</span> <span class="o">=</span> <span class="n">current_row</span>
+
+    <span class="k">return</span> <span class="n">previous_row</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="probabilistic-concatenation-function">
+<h2>Probabilistic Concatenation Function<a class="headerlink" href="#probabilistic-concatenation-function" title="Permalink to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">prob_con</span></code> computes pairwise match scores between all records in <code class="docutils literal notranslate"><span class="pre">df1</span></code> and <code class="docutils literal notranslate"><span class="pre">df2</span></code> on the specified columns, then selects the best match for each <code class="docutils literal notranslate"><span class="pre">df1</span></code> record using weighted random sampling.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">calculate_probability</span><span class="p">(</span><span class="n">distance</span><span class="p">,</span> <span class="n">max_len</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate probability of match based on Levenshtein distance and maximum length of strings.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">max_len</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">distance</span> <span class="o">/</span> <span class="n">max_len</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="helper-binary-encoding-of-numeric-columns">
+<h2>Helper: Binary Encoding of Numeric Columns<a class="headerlink" href="#helper-binary-encoding-of-numeric-columns" title="Permalink to this heading">#</a></h2>
+<p>To use numeric fields as matching keys, we convert them to binary strings so Levenshtein distance captures approximate numeric proximity.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">prob_con</span><span class="p">(</span><span class="n">df1</span><span class="p">,</span> <span class="n">df2</span><span class="p">,</span> <span class="n">columns_df1</span><span class="p">,</span> <span class="n">columns_df2</span><span class="p">,</span> <span class="n">noise_level</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># Precompute maximum lengths for normalization</span>
+    <span class="n">max_lengths</span> <span class="o">=</span> <span class="p">{</span><span class="n">col1</span><span class="p">:</span> <span class="nb">max</span><span class="p">(</span><span class="n">df1</span><span class="p">[</span><span class="n">col1</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">len</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">df2</span><span class="p">[</span><span class="n">col2</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">len</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+                   <span class="k">for</span> <span class="n">col1</span><span class="p">,</span> <span class="n">col2</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">columns_df1</span><span class="p">,</span> <span class="n">columns_df2</span><span class="p">)}</span>
+
+    <span class="c1"># Iterate over each record in df1</span>
+    <span class="k">for</span> <span class="n">index1</span><span class="p">,</span> <span class="n">row1</span> <span class="ow">in</span> <span class="n">df1</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+        <span class="n">best_match</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">max_score</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1"># Compare with each record in df2</span>
+        <span class="k">for</span> <span class="n">index2</span><span class="p">,</span> <span class="n">row2</span> <span class="ow">in</span> <span class="n">df2</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="n">total_prob</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="c1"># Calculate combined probability over all matching columns</span>
+            <span class="k">for</span> <span class="n">col1</span><span class="p">,</span> <span class="n">col2</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">columns_df1</span><span class="p">,</span> <span class="n">columns_df2</span><span class="p">):</span>
+                <span class="n">str1</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">row1</span><span class="p">[</span><span class="n">col1</span><span class="p">])</span>
+                <span class="n">str2</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">row2</span><span class="p">[</span><span class="n">col2</span><span class="p">])</span>
+                <span class="n">distance</span> <span class="o">=</span> <span class="n">levenshtein_distance</span><span class="p">(</span><span class="n">str1</span><span class="p">,</span> <span class="n">str2</span><span class="p">)</span>
+                <span class="n">prob</span> <span class="o">=</span> <span class="n">calculate_probability</span><span class="p">(</span><span class="n">distance</span><span class="p">,</span> <span class="n">max_lengths</span><span class="p">[</span><span class="n">col1</span><span class="p">])</span>
+                <span class="n">total_prob</span> <span class="o">*=</span> <span class="n">prob</span>
+            <span class="c1"># Add noise to the total probability</span>
+            <span class="n">noisy_prob</span> <span class="o">=</span> <span class="n">total_prob</span> <span class="o">+</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">noise_level</span><span class="p">)</span>
+            <span class="c1"># Update the best match if the current noisy probability is higher</span>
+            <span class="k">if</span> <span class="n">noisy_prob</span> <span class="o">&gt;</span> <span class="n">max_score</span><span class="p">:</span>
+                <span class="n">best_match</span> <span class="o">=</span> <span class="n">index2</span>
+                <span class="n">max_score</span> <span class="o">=</span> <span class="n">noisy_prob</span>
+        <span class="c1"># Append the best match and the max score for this record</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;df1_index&#39;</span><span class="p">:</span> <span class="n">index1</span><span class="p">,</span> <span class="s1">&#39;df2_index&#39;</span><span class="p">:</span> <span class="n">best_match</span><span class="p">,</span> <span class="s1">&#39;score&#39;</span><span class="p">:</span> <span class="n">max_score</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="generate-two-synthetic-partial-datasets">
+<h2>Generate Two Synthetic Partial Datasets<a class="headerlink" href="#generate-two-synthetic-partial-datasets" title="Permalink to this heading">#</a></h2>
+<p>We simulate two partial datasets that share <code class="docutils literal notranslate"><span class="pre">age</span></code> and <code class="docutils literal notranslate"><span class="pre">sex</span></code> but contain different additional variables. In practice, replace these with <code class="docutils literal notranslate"><span class="pre">pd.read_csv()</span></code> or <code class="docutils literal notranslate"><span class="pre">pd.read_excel()</span></code> calls.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">convert_numbers_to_binary</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">column_name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if a feature in the DataFrame is numeric and convert each number to its binary representation.&quot;&quot;&quot;</span>
+    <span class="c1"># Check if the column is numeric</span>
+    <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">is_numeric_dtype</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">column_name</span><span class="p">]):</span>
+        <span class="c1"># Convert each number to binary (without the &#39;0b&#39; prefix)</span>
+        <span class="n">df</span><span class="p">[</span><span class="n">column_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">column_name</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">format</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="s1">&#39;b&#39;</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The column &#39;</span><span class="si">{</span><span class="n">column_name</span><span class="si">}</span><span class="s2">&#39; is not numeric and cannot be converted to binary.&quot;</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">df</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate synthetic data directly for df1</span>
+<span class="n">df1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">&#39;age&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">),</span>  <span class="c1"># Random ages between 20 and 70</span>
+    <span class="s1">&#39;gender&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">),</span>  <span class="c1"># Random binary gender</span>
+    <span class="s1">&#39;education_level&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">),</span>  <span class="c1"># Random education level from 1 to 4</span>
+    <span class="s1">&#39;income&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">20000</span><span class="p">,</span> <span class="mi">100000</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">),</span>  <span class="c1"># Random income between 20,000 and 100,000</span>
+    <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>  <span class="c1"># Random height between 150 cm and 200 cm</span>
+<span class="p">})</span>
+
+<span class="c1"># Generate independent synthetic data directly for df2 with only 20 samples</span>
+<span class="n">df2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">&#39;years&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">),</span>  <span class="c1"># Similar age range for easy comparison</span>
+    <span class="s1">&#39;sex&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">),</span>  <span class="c1"># Random binary gender</span>
+    <span class="s1">&#39;edu_level&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">),</span>  <span class="c1"># Random education level from 1 to 4</span>
+    <span class="s1">&#39;library_access&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">),</span>  <span class="c1"># Binary, 1 or 0</span>
+    <span class="s1">&#39;family_members&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>  <span class="c1"># Family members from 1 to 6</span>
+<span class="p">})</span>
+
+<span class="c1"># Print column names to verify</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;df1 columns:&quot;</span><span class="p">,</span> <span class="n">df1</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;df2 columns:&quot;</span><span class="p">,</span> <span class="n">df2</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="run-probabilistic-concatenation">
+<h2>Run Probabilistic Concatenation<a class="headerlink" href="#run-probabilistic-concatenation" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create copies of original data before converting to binary for merging purposes</span>
+<span class="n">original_df1</span> <span class="o">=</span> <span class="n">df1</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">original_df2</span> <span class="o">=</span> <span class="n">df2</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="c1"># Data Preparation - Define the column names to be matched</span>
+<span class="n">columns_df1</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;gender&#39;</span><span class="p">,</span> <span class="s1">&#39;education_level&#39;</span><span class="p">]</span>
+<span class="n">columns_df2</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;years&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;edu_level&#39;</span><span class="p">]</span>
+
+<span class="c1"># Convert all matching numeric columns to binary representation</span>
+<span class="k">for</span> <span class="n">col_df1</span><span class="p">,</span> <span class="n">col_df2</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">columns_df1</span><span class="p">,</span> <span class="n">columns_df2</span><span class="p">):</span>
+    <span class="n">df1</span> <span class="o">=</span> <span class="n">convert_numbers_to_binary</span><span class="p">(</span><span class="n">df1</span><span class="p">,</span> <span class="n">col_df1</span><span class="p">)</span>
+    <span class="n">df2</span> <span class="o">=</span> <span class="n">convert_numbers_to_binary</span><span class="p">(</span><span class="n">df2</span><span class="p">,</span> <span class="n">col_df2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run the probablistic concatenation</span>
+<span class="n">matches</span> <span class="o">=</span> <span class="n">prob_con</span><span class="p">(</span><span class="n">df1</span><span class="p">,</span> <span class="n">df2</span><span class="p">,</span> <span class="n">columns_df1</span><span class="p">,</span> <span class="n">columns_df2</span><span class="p">)</span>
+<span class="n">matches</span><span class="o">.</span><span class="n">head</span><span class="p">(),</span> <span class="n">matches</span><span class="p">[</span><span class="s1">&#39;score&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="build-the-merged-dataset">
+<h2>Build the Merged Dataset<a class="headerlink" href="#build-the-merged-dataset" title="Permalink to this heading">#</a></h2>
+<p>For each <code class="docutils literal notranslate"><span class="pre">df1</span></code> record, append the matched <code class="docutils literal notranslate"><span class="pre">df2</span></code> columns.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define columns from df1 and df2 that are not matched</span>
+<span class="n">unmatched_df1_columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">original_df1</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">columns_df1</span><span class="p">]</span>
+<span class="n">unmatched_df2_columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">original_df2</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">columns_df2</span><span class="p">]</span>
+
+<span class="c1"># Initialize a list to collect rows for merged data</span>
+<span class="n">merged_rows</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1"># Iterate over the matches to combine rows from original df1 and df2 using the original data</span>
+<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">matches</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+    <span class="n">df1_row</span> <span class="o">=</span> <span class="n">original_df1</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">match</span><span class="p">[</span><span class="s1">&#39;df1_index&#39;</span><span class="p">],</span> <span class="n">unmatched_df1_columns</span> <span class="o">+</span> <span class="n">columns_df1</span><span class="p">]</span>
+    <span class="n">df2_row</span> <span class="o">=</span> <span class="n">original_df2</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">match</span><span class="p">[</span><span class="s1">&#39;df2_index&#39;</span><span class="p">],</span> <span class="n">unmatched_df2_columns</span><span class="p">]</span>
+    <span class="n">combined_row</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df1_row</span><span class="p">,</span> <span class="n">df2_row</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">merged_rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">combined_row</span><span class="p">)</span>
+
+<span class="c1"># Convert the list of Series into a DataFrame and transpose</span>
+<span class="n">merged_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">merged_rows</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+<span class="n">merged_data</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">unmatched_df1_columns</span> <span class="o">+</span> <span class="n">columns_df1</span> <span class="o">+</span> <span class="n">unmatched_df2_columns</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this heading">#</a></h2>
+<p>Probabilistic concatenation produces a single merged dataset from two partial sources without requiring exact key alignment. The stochastic match selection avoids the deterministic bias of always picking the closest match when several candidates are equally plausible.</p>
+<p><strong>Related publication:</strong>
+Marchev, V., Marchev, A. (2023). <em>Synthesizing an anonymized multidimensional dataset featuring financial, economic, demographic, and personal traits data.</em> VSIM, vol. 19, no. 1, ISSN 1314-0582.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks/ch11_probcon"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../ch08_cholesky/cholesky_decomposition.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Chapter 8 — Cholesky Decomposition for Correlated Data Synthesis</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="02_data_link.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Chapter 11 (Supplement) — Fuzzy Dataset Linking with <code class="docutils literal notranslate"><span class="pre">fuzzymatcher</span></code> with <code class="docutils literal notranslate"><span class="pre">fuzzymatcher</span></code></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#utility-functions">Utility Functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#probabilistic-concatenation-function">Probabilistic Concatenation Function</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#helper-binary-encoding-of-numeric-columns">Helper: Binary Encoding of Numeric Columns</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-two-synthetic-partial-datasets">Generate Two Synthetic Partial Datasets</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-probabilistic-concatenation">Run Probabilistic Concatenation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#build-the-merged-dataset">Build the Merged Dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Angel Marchev & Vasil Marchev
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
