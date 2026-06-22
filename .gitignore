@@ -1,3 +1,7 @@
+.claude/
+*.pdf
+*.docx
+*.pptx
 __pycache__/
 *.pyc
 *.pyo

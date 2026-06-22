@@ -25,31 +25,34 @@ jupyter nbconvert --to script <notebook>.ipynb --stdout
 
 ```
 notebooks/
-  01_imputation/     ← missing value techniques
-  02_oversampling/   ← imbalanced dataset handling
-  03_monte_carlo/    ← random simulation methods
-  04_cholesky/       ← non-random: correlation-based synthesis
-  05_copula/         ← non-random: joint distribution synthesis
-  06_gan/            ← random: deep generative model
-  07_fuzzy_matching/ ← dataset linking and concatenation
+  01_imputation/     ← supporting: missing value techniques (Ch. 2.2)
+  02_oversampling/   ← supporting: imbalanced dataset handling (Ch. 3.3.1)
+  03_monte_carlo/    ← supporting: Monte Carlo simulation (Ch. 6.3.3)
+  ch08_cholesky/     ← Part IV Ch. 8: Cholesky decomposition
+  ch11_probcon/      ← Part IV Ch. 11: Probabilistic Concatenation (ProbCon)
+  ch12_gan/          ← Part IV Ch. 12: GAN anonymisation
+  ch13_copula/       ← Part IV Ch. 13: Inverse copula sampling
 data/                ← Bulgarian financial/demographic CSVs (~15k rows, ~48 features)
 models/              ← pre-trained TF SavedModel (generator.tf, discriminator.tf)
 fuzzymatcher/        ← vendored fuzzy matching library
 reference/           ← sklearn synthesis function reference
 ```
 
+Chapters 9, 10, 14, 15 from the monograph are not yet represented by notebooks.
+
 ## Notebook Paths and Data Files
 
-Notebooks under `notebooks/` reference data with `../../data/` relative paths. The GAN notebook (`06_gan/gan_synthetic_data.ipynb`) reads `../../data/sim_data_vasko - rab - sim_data.csv` and saves outputs to `../../data/` and `../../models/`.
+Notebooks under `notebooks/` reference data with `../../data/` relative paths. The GAN notebook (`ch12_gan/gan_synthetic_data.ipynb`) reads `../../data/sim_data_vasko - rab - sim_data.csv` and saves outputs to `../../data/` and `../../models/`.
 
-`notebooks/07_fuzzy_matching/02_data_link.ipynb` requires two external Excel files (`demogr-filtered.xlsx`, `big5_data.xlsx`) that are not in this repo — see the warning cell at the top of that notebook.
+`notebooks/ch11_probcon/02_data_link.ipynb` requires two external Excel files (`demogr-filtered.xlsx`, `big5_data.xlsx`) not in this repo — see the warning cell at the top of that notebook.
 
 ## Algorithm Taxonomy
 
-From the monograph (PPTX Slide 19):
-- **Random methods**: Monte Carlo (`03_monte_carlo/`), GAN (`06_gan/`)
-- **Non-random methods**: Cholesky (`04_cholesky/`), Inverse Copula (`05_copula/`)
-- **Supporting**: Imputation (`01_imputation/`), Oversampling (`02_oversampling/`), Fuzzy Matching (`07_fuzzy_matching/`)
+From the monograph Ch. 6 methodological tree:
+- **Random methods**: Monte Carlo (`03_monte_carlo/`), GAN (`ch12_gan/`)
+- **Non-random methods**: Cholesky (`ch08_cholesky/`), Inverse Copula (`ch13_copula/`)
+- **Dataset linking**: ProbCon (`ch11_probcon/`)
+- **Supporting building blocks**: Imputation (`01_imputation/`), Oversampling (`02_oversampling/`)
 
 ## fuzzymatcher Library
 
